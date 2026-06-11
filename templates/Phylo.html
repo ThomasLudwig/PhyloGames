@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz phylogénétique</title>
+</head>
+
+<body>
+
+    <h1>Tirage d'espèces</h1>
+
+    <p>Charge ton fichier CSV :</p>
+    <input type="file" id="csvFile">
+
+    <br><br>
+
+    <p>Nombre d'espèces à tirer :</p>
+
+    <select id="selectTirage">
+        <option value="4">4 espèces</option>
+        <option value="6">6 espèces</option>
+        <option value="8">8 espèces</option>
+        <option value="10" selected>10 espèces</option>
+        <option value="12">12 espèces</option>
+        <option value="15">15 espèces</option>
+        <option value="20">20 espèces</option>
+    </select>
+
+    <br><br>
+
+    <p>Groupes d'espèces :</p>
+
+    <select id="selectGroupes" multiple size="8">
+        <option value="Marsupiaux">Marsupiaux</option>
+        <option value="Mammifères">Mammifères</option>
+        <option value="Oiseaux">Oiseaux</option>
+        <option value="Reptiles">Reptiles</option>
+        <option value="Poisson">Poisson</option>
+        <option value="Invertébrés">Invertébrés</option>
+        <option value="Plantes">Plantes</option>
+        <option value="Champignons">Champignons</option>
+    </select>
+
+    <br><br>
+
+    <button onclick="lancerTirage()">
+        Tirer les espèces
+    </button>
+
+    <br><br>
+
+    <p>Groupes combinés :</p>
+
+    <select id="selectCouples" multiple size="4">
+        <option value="Marsupiaux,Mammifères">
+            Marsupiaux et Mammifères
+        </option>
+
+        <option value="Oiseaux,Reptiles">
+            Oiseaux et Reptiles
+        </option>
+
+        <option value="Poisson,Invertébrés">
+            Poisson et Invertébrés
+        </option>
+
+        <option value="Plantes,Champignons">
+            Plantes et Champignons
+        </option>
+    </select>
+
+    <br><br>
+
+    <button onclick="lancerTirageDouble()">
+        Tirer les espèces
+    </button>
+
+    <hr>
+
+    <h2>Résultats</h2>
+
+    <div id="resultats"></div>
+
+    <br>
+
+    <button id="btnDownload" style="display:none;">
+        Télécharger les TaxIDs
+    </button>
+
+    <hr>
+
+    <h2>Arbre phylogénétique</h2>
+
+    <div id="tree-container"
+         style="width:100%;height:700px;">
+    </div>
+
+    <hr>
+
+    <h3>Correspondance des numéros</h3>
+
+    <div id="mapping"></div>
+
+    <hr>
+
+    <h3>Associer chaque numéro à une espèce</h3>
+
+    <div id="quiz"></div>
+
+    <br>
+
+    <button id="btnCorrection">
+        Corriger
+    </button>
+
+    <div id="score"></div>
+
+    <br>
+
+    <button id="btnSolution">
+        Voir la solution
+    </button>
+
+    <div id="solution"></div>
+
+    <script src="/static/script_phylo.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/gh/SmitsP/phyloCanvas/jsphylosvg-min.js"></script>
+
+</body>
+
+</html>
