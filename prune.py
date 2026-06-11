@@ -3,6 +3,10 @@ import json
 
 from ete3 import Tree, TreeStyle
 
+# =========================
+# Arguments
+# =========================
+
 parser = argparse.ArgumentParser()
 
 parser.add_argument("-i", "--input", required=True)
@@ -10,22 +14,37 @@ parser.add_argument("-o", "--output", required=True)
 parser.add_argument("-t", "--taxa", nargs="+", required=True)
 
 args = parser.parse_args()
-# On charge l'arbre
+
+# =========================
+# Chargement arbre
+# =========================
+
 tree = Tree(args.input, format=1)
 
 existing = set(tree.get_leaf_names())
-# On transorme "A,B,C,D" en "A","B","C","D"
+
 keep = [x for x in args.taxa if x in existing]
 
 if len(keep) == 0:
     raise ValueError(
         "Aucun taxon valide trouvé dans l'arbre"
     )
-# On coupe
+
+# =========================
+# Prune
+# =========================
+
 tree.prune(
     keep,
     preserve_branch_length=True
 )
+
+# copie AVANT renommage
+solution_tree = tree.copy()
+
+# =========================
+# Equivalences
+# =========================
 
 equivalents = {}
 
@@ -51,6 +70,10 @@ for node in tree.traverse():
         equivalents.setdefault(a, []).append(b)
         equivalents.setdefault(b, []).append(a)
 
+# =========================
+# Mapping numéro -> taxid
+# =========================
+
 mapping = {}
 
 for i, leaf in enumerate(
@@ -61,6 +84,10 @@ for i, leaf in enumerate(
     mapping[str(i)] = leaf.name
 
     leaf.name = str(i)
+
+# =========================
+# Sauvegarde mapping
+# =========================
 
 with open(
     "static/mapping.json",
@@ -75,6 +102,9 @@ with open(
         indent=4
     )
 
+# =========================
+# Sauvegarde équivalences
+# =========================
 
 with open(
     "static/equivalents.json",
@@ -88,18 +118,70 @@ with open(
         ensure_ascii=False,
         indent=4
     )
-# On sauvegarde
+
+# =========================
+# Charger les noms
+# =========================
+
+try:
+
+    with open(
+        "static/especes.json",
+        "r",
+        encoding="utf-8"
+    ) as f:
+
+        noms = json.load(f)
+
+except Exception:
+
+    noms = {}
+
+# =========================
+# Remplacer TaxID par nom
+# =========================
+
+for leaf in solution_tree.iter_leaves():
+
+    taxid = leaf.name
+
+    if taxid in noms:
+
+        leaf.name = noms[taxid]
+
+# =========================
+# Sauvegarde nwk
+# =========================
+
 tree.write(
     outfile=args.output,
     format=1
 )
 
-ts = TreeStyle()
+# =========================
+# Style
+# =========================
 
+ts = TreeStyle()
 ts.show_leaf_name = True
+
+# =========================
+# Arbre quiz
+# =========================
 
 tree.render(
     "static/tree.png",
+    w=1200,
+    units="px",
+    tree_style=ts
+)
+
+# =========================
+# Arbre solution
+# =========================
+
+solution_tree.render(
+    "static/solution.png",
     w=1200,
     units="px",
     tree_style=ts
