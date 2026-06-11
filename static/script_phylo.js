@@ -539,30 +539,15 @@ function corrigerQuiz() {
 function voirSolution() {
 
     let html =
-        "<h3>Solution</h3>";
+        "<h3>Arbre corrigé</h3>";
 
-    for (const numero in mappingCourant) {
+    html +=
+        "<img src='/static/solution.png?t=" +
+        Date.now() +
+        "' style='max-width:100%;border:1px solid #000'>";
 
-        const taxid =
-            mappingCourant[numero];
-
-        const e =
-            especes[taxid];
-
-        if (!e) continue;
-
-        html +=
-            "<b>" +
-            numero +
-            "</b> → " +
-            e.commonName +
-            " (" +
-            e.latinName +
-            ")" +
-            "<br>";
-    }
-
-    document.getElementById("solution")
+    document
+        .getElementById("solution")
         .innerHTML = html;
 }
 
