@@ -1,0 +1,161 @@
+NCBI Tax ID,Nom scientifique,Nom commun,Règne,Classe,Ordre,OTTID
+9606,Homo sapiens,Être humain,Animalia,Mammalia,Primates,770315
+9615,Canis lupus familiaris,Chien domestique,Animalia,Mammalia,Carnivora,247333
+9685,Felis catus,Chat domestique,Animalia,Mammalia,Carnivora,563166
+9913,Bos taurus,Vache domestique,Animalia,Mammalia,Artiodactyla,490099
+9823,Sus scrofa,Sanglier / Porc,Animalia,Mammalia,Artiodactyla,730013
+10090,Mus musculus,Souris domestique,Animalia,Mammalia,Rodentia,542509
+10116,Rattus norvegicus,Rat de Norvège,Animalia,Mammalia,Rodentia,271555
+9796,Equus caballus,Cheval,Animalia,Mammalia,Perissodactyla,1068218
+9925,Capra hircus,Chèvre domestique,Animalia,Mammalia,Artiodactyla,19017
+9940,Ovis aries,Mouton domestique,Animalia,Mammalia,Artiodactyla,70819
+9361,Dasypus novemcinctus,Tatou à neuf bandes,Animalia,Mammalia,Cingulata,796672
+9371,Erinaceus europaeus,Hérisson d'Europe occidentale,Animalia,Mammalia,Erinaceomorpha,222351
+9258,Ornithorhynchus anatinus,Ornithorynque,Animalia,Mammalia,Monotremata,962377
+9994,Sciurus vulgaris,Écureuil roux eurasien,Animalia,Mammalia,Rodentia,289915
+9669,Mustela putorius furo,Furet domestique,Animalia,Mammalia,Carnivora,923119
+35500,Tursiops truncatus,Grand dauphin commun,Animalia,Mammalia,Artiodactyla,403912
+9694,Panthera leo,Lion,Animalia,Mammalia,Carnivora,42314
+9691,Panthera pardus,Léopard,Animalia,Mammalia,Carnivora,42324
+9708,Ursus arctos,Ours brun,Animalia,Mammalia,Carnivora,749624
+9739,Elephas maximus,Éléphant d'Asie,Animalia,Mammalia,Proboscidea,124230
+9315,Macropus rufus,Kangourou roux,Animalia,Mammalia,Diprotodontia,539171
+9305,Didelphis virginiana,Opossum de Virginie,Animalia,Mammalia,Didelphimorphia,948469
+9317,Vombatus ursinus,Wombat commun,Animalia,Mammalia,Diprotodontia,597239
+49271,Tachyglossus aculeatus,Échidné à bec court,Animalia,Mammalia,Monotremata,79623
+9321,Phascolarctos cinereus,Koala,Animalia,Mammalia,Diprotodontia,897696
+9329,Perameles nasuta,Bandicoot à long nez,Animalia,Mammalia,Peramelemorphia,951195
+40151,Dasyurus viverrinus,Quoll de l'Est,Animalia,Mammalia,Dasyuromorphia,306757
+9305,Sarcophilus harrisii,Diable de Tasmanie,Animalia,Mammalia,Dasyuromorphia,948469
+9318,Petaurus breviceps,Phalanger volant,Animalia,Mammalia,Diprotodontia,372371
+9313,Macropus eugenii,Wallaby de Tammar,Animalia,Mammalia,Diprotodontia,42493
+9330,Isoodon obesulus,Bandicoot brun du Sud,Animalia,Mammalia,Peramelemorphia,836770
+75150,Antechinus stuartii,Antéchine de Stuart,Animalia,Mammalia,Dasyuromorphia,794661
+9304,Sminthopsis crassicaudata,Dunnart à queue grasse,Animalia,Mammalia,Dasyuromorphia,948468
+283909,Potorous tridactylus,Potorou à long nez,Animalia,Mammalia,Diprotodontia,707082
+9312,Bettongia penicillata,Bettongie à queue en pinceau,Animalia,Mammalia,Diprotodontia,42495
+9335,Pseudocheirus peregrinus,Pseudocheirus commun,Animalia,Mammalia,Diprotodontia,323239
+38626,Trichosurus vulpecula,Phalanger renard commun,Animalia,Mammalia,Diprotodontia,327624
+9326,Dactylopsila trivirgata,Phalanger rayé,Animalia,Mammalia,Diprotodontia,897699
+9332,Acrobates pygmaeus,Acrobate pygmée,Animalia,Mammalia,Diprotodontia,836775
+168240,Dendrolagus lumholtzi,Kangourou arboricole de Lumholtz,Animalia,Mammalia,Diprotodontia,756151
+8782,Crocodylus niloticus,Crocodile du Nil,Animalia,Reptilia,Crocodylia,81461
+8496,Alligator mississippiensis,Alligator américain,Animalia,Reptilia,Crocodylia,335590
+8508,Iguana iguana,Iguane vert,Animalia,Reptilia,Squamata,35890
+8459,Chelonia mydas,Tortue verte,Animalia,Reptilia,Testudines,639666
+98395,Varanus komodoensis,Dragon de Komodo,Animalia,Reptilia,Squamata,14761
+8469,Dermochelys coriacea,Tortue luth,Animalia,Reptilia,Testudines,559133
+8475,Caretta caretta,Tortue caouanne,Animalia,Reptilia,Testudines,587311
+8543,Python bivittatus,Python de Birmanie,Animalia,Reptilia,Squamata,139525
+8550,Boa constrictor,Boa constricteur,Animalia,Reptilia,Squamata,978851
+8728,Naja naja,Cobra indien,Animalia,Reptilia,Squamata,27078
+176946,Dendroaspis polylepis,Mamba noir,Animalia,Reptilia,Squamata,88370
+8726,Crotalus atrox,Crotale diamantin de l'Ouest,Animalia,Reptilia,Squamata,27092
+38654,Chamaeleo chamaeleon,Caméléon commun,Animalia,Reptilia,Squamata,953151
+28377,Anolis carolinensis,Anole vert,Animalia,Reptilia,Squamata,705356
+8493,Gecko gecko,Gecko tokay,Animalia,Reptilia,Squamata,335582
+8479,Testudo hermanni,Tortue d'Hermann,Animalia,Reptilia,Testudines,587300
+270612,Sphenodon punctatus,Sphénodon (Tuatara),Animalia,Reptilia,Rhynchocephalia,5223673
+13723,Eublepharis macularius,Gecko léopard,Animalia,Reptilia,Squamata,665908
+180179,Geochelone elegans,Tortue étoilée indienne,Animalia,Reptilia,Testudines,302068
+192061,Tiliqua scincoides,Scinque à langue bleue,Animalia,Reptilia,Squamata,891102
+7159,Aedes aegypti,Moustique de la fièvre jaune,Animalia,Insecta,Diptera,269666
+7227,Drosophila melanogaster,Mouche du vinaigre,Animalia,Insecta,Diptera,505714
+7460,Apis mellifera,Abeille mellifère,Animalia,Insecta,Hymenoptera,461645
+13037,Bombyx mori,Ver à soie du mûrier,Animalia,Insecta,Lepidoptera,190091
+7070,Tribolium castaneum,Tribolium de la farine,Animalia,Insecta,Coleoptera,148904
+6945,Ixodes scapularis,Tique du cerf,Animalia,Arachnida,Ixodida,621065
+110193,Danaus plexippus,Papillon monarque,Animalia,Insecta,Lepidoptera,336542
+7111,Manduca sexta,Sphinx du tabac,Animalia,Insecta,Lepidoptera,167935
+6669,Daphnia pulex,Puce d'eau,Animalia,Crustacea,Cladocera,59086
+7425,Nasonia vitripennis,Guêpe bijou,Animalia,Insecta,Hymenoptera,729593
+7539,Locusta migratoria,Criquet migrateur,Animalia,Insecta,Orthoptera,185597
+7108,Spodoptera frugiperda,Chenille légionnaire d'automne,Animalia,Insecta,Lepidoptera,742367
+710234,Culex quinquefasciatus,Moustique commun du Sud,Animalia,Insecta,Diptera,726795
+7130,Blattella germanica,Blatte germanique,Animalia,Insecta,Blattodea,116647
+7165,Anopheles gambiae,Anophèle gambien,Animalia,Insecta,Diptera,553555
+77166,Gryllus bimaculatus,Grillon à deux taches,Animalia,Insecta,Orthoptera,1017374
+13686,Solenopsis invicta,Fourmi de feu rouge,Animalia,Insecta,Hymenoptera,489862
+116153,Bemisia tabaci,Mouche blanche du tabac,Animalia,Insecta,Hemiptera,989691
+50557,Forficula auricularia,Perce-oreille commun,Animalia,Insecta,Dermaptera,1062253
+7507,Vespa mandarinia,Frelon géant asiatique,Animalia,Insecta,Hymenoptera,656298
+9031,Gallus gallus,Poulet domestique,Animalia,Aves,Galliformes,153563
+9103,Meleagris gallopavo,Dindon sauvage,Animalia,Aves,Galliformes,446482
+9157,Columba livia,Pigeon biset,Animalia,Aves,Columbiformes,515143
+59729,Taeniopygia guttata,Diamant mandarin,Animalia,Aves,Passeriformes,708327
+9166,Struthio camelus,Autruche commune,Animalia,Aves,Struthioniformes,44866
+8932,Aquila chrysaetos,Aigle royal,Animalia,Aves,Accipitriformes,938416
+56280,Spheniscus demersus,Manchot du Cap,Animalia,Aves,Sphenisciformes,767829
+13616,Dromaius novaehollandiae,Émeu d'Australie,Animalia,Aves,Casuariiformes,122362
+30538,Anas platyrhynchos,Canard colvert,Animalia,Aves,Anseriformes,906301
+8954,Falco peregrinus,Faucon pèlerin,Animalia,Aves,Falconiformes,786435
+9083,Ara ararauna,Ara bleu et jaune,Animalia,Aves,Psittaciformes,521334
+48883,Bubo bubo,Grand-duc d'Europe,Animalia,Aves,Strigiformes,589951
+228772,Parus major,Mésange charbonnière,Animalia,Aves,Passeriformes,50961
+9175,Phoenicopterus roseus,Flamant rose,Animalia,Aves,Phoenicopteriformes,565806
+56313,Ciconia ciconia,Cigogne blanche,Animalia,Aves,Ciconiiformes,1065606
+9064,Alca torda,Pingouin torda,Animalia,Aves,Charadriiformes,572170
+34924,Pica pica,Pie bavarde,Animalia,Aves,Passeriformes,776471
+54374,Hirundo rustica,Hirondelle rustique,Animalia,Aves,Passeriformes,966316
+9235,Upupa epops,Huppe fasciée,Animalia,Aves,Bucerotiformes,494364
+9173,Pelecanus onocrotalus,Pélican blanc,Animalia,Aves,Pelecaniformes,565811
+7955,Danio rerio,Poisson zèbre,Animalia,Actinopterygii,Cypriniformes,1005914
+8049,Oryzias latipes,Médaka du Japon,Animalia,Actinopterygii,Beloniformes,114170
+8090,Gasterosteus aculeatus,Épinoche à trois épines,Animalia,Actinopterygii,Gasterosteiformes,942673
+13735,Tetraodon nigroviridis,Tétrodon vert tacheté,Animalia,Actinopterygii,Tetraodontiformes,143391
+31033,Takifugu rubripes,Fugu (Tétrodon japonais),Animalia,Actinopterygii,Tetraodontiformes,65341
+8154,Xiphophorus maculatus,Platy du Sud,Animalia,Actinopterygii,Cyprinodontiformes,710017
+8160,Poecilia reticulata,Guppy,Animalia,Actinopterygii,Cyprinodontiformes,186473
+7994,Cyprinus carpio,Carpe commune,Animalia,Actinopterygii,Cypriniformes,701518
+8010,Salmo salar,Saumon atlantique,Animalia,Actinopterygii,Salmoniformes,739941
+8022,Oncorhynchus mykiss,Truite arc-en-ciel,Animalia,Actinopterygii,Salmoniformes,165368
+7998,Ictalurus punctatus,Poisson-chat tacheté,Animalia,Actinopterygii,Siluriformes,701523
+8175,Gadus morhua,Morue de l'Atlantique,Animalia,Actinopterygii,Gadiformes,760723
+8102,Dicentrarchus labrax,Bar commun (Loup de mer),Animalia,Actinopterygii,Perciformes,316605
+8128,Oreochromis niloticus,Tilapia du Nil,Animalia,Actinopterygii,Cichliformes,288063
+60415,Electrophorus electricus,Anguille électrique,Animalia,Actinopterygii,Gymnotiformes,1064105
+7957,Carassius auratus,Poisson rouge,Animalia,Actinopterygii,Cypriniformes,1005907
+7950,Anguilla anguilla,Anguille européenne,Animalia,Actinopterygii,Anguilliformes,1005932
+30455,Thunnus thynnus,Thon rouge de l'Atlantique,Animalia,Actinopterygii,Perciformes,1028832
+8083,Fundulus heteroclitus,Fondule barré,Animalia,Actinopterygii,Cyprinodontiformes,416852
+7936,Petromyzon marinus,Lamproie marine,Animalia,Hyperoartia,Petromyzontiformes,854201
+3702,Arabidopsis thaliana,Arabette des dames,Plantae,Magnoliopsida,Brassicales,309263
+4530,Oryza sativa,Riz asiatique,Plantae,Liliopsida,Poales,709894
+4577,Zea mays,Maïs,Plantae,Liliopsida,Poales,605194
+4081,Solanum lycopersicum,Tomate,Plantae,Magnoliopsida,Solanales,378964
+4113,Solanum tuberosum,Pomme de terre,Plantae,Magnoliopsida,Solanales,494835
+4232,Lactuca sativa,Laitue,Plantae,Magnoliopsida,Asterales,515712
+3988,Ricinus communis,Ricin commun,Plantae,Magnoliopsida,Malpighiales,339346
+4097,Nicotiana tabacum,Tabac cultivé,Plantae,Magnoliopsida,Solanales,222787
+3694,Populus trichocarpa,Peuplier de l'Ouest,Plantae,Magnoliopsida,Malpighiales,8861
+3760,Prunus persica,Pêcher,Plantae,Magnoliopsida,Rosales,259054
+3750,Malus domestica,Pommier domestique,Plantae,Magnoliopsida,Rosales,3902985
+4236,Brassica oleracea,Chou / Chou frisé / Brocoli,Plantae,Magnoliopsida,Brassicales,515700
+3880,Medicago truncatula,Luzerne tronquée,Plantae,Magnoliopsida,Fabales,1060499
+3847,Glycine max,Soja,Plantae,Magnoliopsida,Fabales,681762
+3635,Gossypium hirsutum,Cotonnier upland,Plantae,Magnoliopsida,Malvales,854480
+29760,Vitis vinifera,Vigne cultivée,Plantae,Magnoliopsida,Vitales,756728
+4641,Musa acuminata,Bananier,Plantae,Liliopsida,Zingiberales,207474
+4153,Daucus carota,Carotte,Plantae,Magnoliopsida,Apiales,596452
+3562,Spinacia oleracea,Épinard,Plantae,Magnoliopsida,Caryophyllales,317784
+3659,Cucumis sativus,Concombre,Plantae,Magnoliopsida,Cucurbitales,1006246
+4932,Saccharomyces cerevisiae,Levure de boulanger,Fungi,Saccharomycetes,Saccharomycetales,356221
+5476,Candida albicans,Candida blanc,Fungi,Saccharomycetes,Saccharomycetales,154960
+5270,Ustilago maydis,Charbon du maïs,Fungi,Ustilaginomycetes,Ustilaginales,285447
+5334,Schizophyllum commune,Champignon à branchies fendues,Fungi,Agaricomycetes,Polyporales,8357
+40559,Aspergillus niger,Aspergille noir,Fungi,Eurotiomycetes,Eurotiales,17713
+36050,Neurospora crassa,Moisissure rouge du pain,Fungi,Sordariomycetes,Sordariales,1017216
+5507,Trichoderma reesei,Moisissure verte,Fungi,Sordariomycetes,Hypocreales,404217
+5515,Fusarium graminearum,Fusariose de la tête des céréales,Fungi,Sordariomycetes,Hypocreales,5710169
+5346,Agaricus bisporus,Champignon de Paris,Fungi,Agaricomycetes,Agaricales,737441
+5341,Pleurotus ostreatus,Pleurote en huître,Fungi,Agaricomycetes,Agaricales,564405
+5338,Laccaria bicolor,Laccaire bicolore,Fungi,Agaricomycetes,Agaricales,8364
+5297,Puccinia graminis,Rouille noire des céréales,Fungi,Pucciniomycetes,Pucciniales,665704
+29583,Blumeria graminis,Oïdium des graminées,Fungi,Leotiomycetes,Erysiphales,765280
+9180,Phytophthora infestans,Mildiou de la pomme de terre,Chromista,Oomycetes,Peronosporales,96288
+5207,Cryptococcus neoformans,Cryptocoque,Fungi,Tremellomycetes,Tremellales,48333
+5478,Candida glabrata,Candida glabrata,Fungi,Saccharomycetes,Saccharomycetales,718605
+162425,Aspergillus oryzae,Koji (Aspergille du riz),Fungi,Eurotiomycetes,Eurotiales,117339
+5111,Coprinopsis cinerea,Coprin cendré,Fungi,Agaricomycetes,Agaricales,103008
+5739,Phanerochaete chrysosporium,Champignon à pourriture blanche,Fungi,Agaricomycetes,Polyporales,171545
+68442,Tuber melanosporum,Truffe noire du Périgord,Fungi,Pezizomycetes,Pezizales,1054125

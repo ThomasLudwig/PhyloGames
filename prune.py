@@ -39,7 +39,7 @@ tree.prune(
     preserve_branch_length=True
 )
 
-# copie AVANT renommage
+# Copie avant renommage
 solution_tree = tree.copy()
 
 # =========================
@@ -120,7 +120,7 @@ with open(
     )
 
 # =========================
-# Charger les noms
+# Chargement noms espèces
 # =========================
 
 try:
@@ -138,7 +138,7 @@ except Exception:
     noms = {}
 
 # =========================
-# Remplacer TaxID par nom
+# Remplacement TaxID -> Nom
 # =========================
 
 for leaf in solution_tree.iter_leaves():
@@ -150,7 +150,17 @@ for leaf in solution_tree.iter_leaves():
         leaf.name = noms[taxid]
 
 # =========================
-# Sauvegarde nwk
+# Uniformisation des branches
+# =========================
+
+for node in tree.traverse():
+    node.dist = 1
+
+for node in solution_tree.traverse():
+    node.dist = 1
+
+# =========================
+# Sauvegarde arbre nwk
 # =========================
 
 tree.write(
@@ -163,7 +173,22 @@ tree.write(
 # =========================
 
 ts = TreeStyle()
+
 ts.show_leaf_name = True
+ts.scale = 50
+
+# =========================
+# Taille dynamique
+# =========================
+
+nb_especes = len(keep)
+
+largeur = 1200
+
+hauteur = max(
+    500,
+    nb_especes * 80
+)
 
 # =========================
 # Arbre quiz
@@ -171,7 +196,8 @@ ts.show_leaf_name = True
 
 tree.render(
     "static/tree.png",
-    w=1200,
+    w=largeur,
+    h=hauteur,
     units="px",
     tree_style=ts
 )
@@ -182,7 +208,8 @@ tree.render(
 
 solution_tree.render(
     "static/solution.png",
-    w=1200,
+    w=largeur,
+    h=hauteur,
     units="px",
     tree_style=ts
-) 
+)

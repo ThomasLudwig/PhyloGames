@@ -15,35 +15,52 @@ let equivalences = {};
 // Lecture du fichier csv
 // =========================
 
-function loadCSV(file, callback) {
+function loadCSV(callback) {
 
-    const reader = new FileReader();
+    fetch("/especes")
 
-    reader.onload = function(event) {
+        .then(r => r.text())
 
-        const text = event.target.result;
-        const lines = text.trim().split("\n");
+        .then(text => {
 
-        const data = [];
+            const lines =
+                text.trim().split("\n");
 
-        for (let i = 1; i < lines.length; i++) {
+            const data = [];
 
-            const cols = lines[i].split(",");
+            for (
+                let i = 1;
+                i < lines.length;
+                i++
+            ) {
 
-            data.push({
-                taxId: cols[0].trim(),
-                latin: cols[1].trim(),
-                common: cols[2].trim(),
-                reign: cols[3].trim(),
-                clas: cols[4].trim(),
-                order: cols[5].trim()
-            });
-        }
+                const cols =
+                    lines[i].split(",");
 
-        callback(data);
-    };
+                data.push({
 
-    reader.readAsText(file);
+                    taxId:
+                        cols[0].trim(),
+
+                    latin:
+                        cols[1].trim(),
+
+                    common:
+                        cols[2].trim(),
+
+                    reign:
+                        cols[3].trim(),
+
+                    clas:
+                        cols[4].trim(),
+
+                    order:
+                        cols[5].trim()
+                });
+            }
+
+            callback(data);
+        });
 }
 
 
@@ -261,18 +278,18 @@ function afficherResultats(tirage) {
 
     .then(data => {
 
-        document.getElementById("tree-container").innerHTML =
-            "<img src='" +
-            data.image +
-            "?t=" +
-            Date.now() +
-            "' style='max-width:100%;border:1px solid #ccc'>";
+    document.getElementById("tree-container").innerHTML =
+        "<img src='" +
+        data.image +
+        "?t=" +
+        Date.now() +
+        "' style='max-width:95%;height:auto;border:1px solid #ccc'>";
 
-        return fetch(
-            "/static/mapping.json?t=" +
-            Date.now()
-        );
-    })
+    return fetch(
+        "/static/mapping.json?t=" +
+        Date.now()
+    );
+})
 
     .then(r => r.json())
 
@@ -592,21 +609,8 @@ function getNombreTirage() {
 
 function lancerTirage() {
 
-    const fileInput =
-        document.getElementById("csvFile");
-
-    if (!fileInput.files.length) {
-
-        alert(
-            "Aucun fichier CSV sélectionné"
-        );
-
-        return;
-    }
-
     loadCSV(
-        fileInput.files[0],
-        function(rows) {
+    function(rows) {
 
             buildEspeceTable(rows);
 
@@ -658,22 +662,7 @@ const tirage =
 
 function lancerTirageDouble() {
 
-    const fileInput =
-        document.getElementById(
-            "csvFile"
-        );
-
-    if (!fileInput.files.length) {
-
-        alert(
-            "Aucun fichier CSV sélectionné"
-        );
-
-        return;
-    }
-
     loadCSV(
-        fileInput.files[0],
         function(rows) {
 
             buildEspeceTable(rows);
@@ -704,16 +693,42 @@ function lancerTirageDouble() {
             }
 
             const groups =
-                buildGroups();
-                let pool = [];
+    buildGroups();
 
-choisis.forEach(g => {
+const nombre =
+    getNombreTirage();
+
+// =========================
+// Construction du pool
+// =========================
+
+let pool = [];
+
+couples.forEach(g => {
 
     if (groups[g]) {
 
-        pool = pool.concat(groups[g]);
+        pool = pool.concat(
+            groups[g]
+        );
     }
 });
+
+// =========================
+// Suppression des doublons
+// =========================
+
+pool = [
+    ...new Map(
+        pool.map(
+            e => [e.id, e]
+        )
+    ).values()
+];
+
+// =========================
+// Vérification du nombre
+// =========================
 
 if (pool.length < nombre) {
 
@@ -726,13 +741,13 @@ if (pool.length < nombre) {
     return;
 }
 
-            const nombre =
-    getNombreTirage();
+// =========================
+// Tirage
+// =========================
 
 const tirage =
-    tirageGroupes(
-        groups,
-        couples,
+    tirageAleatoire(
+        pool,
         nombre
     );
 
