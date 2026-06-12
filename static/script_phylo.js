@@ -347,6 +347,8 @@ function genererQuiz(mapping) {
         const ligne =
             document.createElement("div");
 
+        ligne.style.marginBottom = "2px";
+
         let html =
             "<b>" + numero + "</b> → ";
 
@@ -380,15 +382,15 @@ function genererQuiz(mapping) {
 
         ligne.innerHTML = html;
 
-quiz.appendChild(ligne);
+        quiz.appendChild(ligne);
 
-const select =
-    ligne.querySelector("select");
+        const select =
+            ligne.querySelector("select");
 
-select.addEventListener(
-    "change",
-    gererDoublons
-);
+        select.addEventListener(
+            "change",
+            gererDoublons
+        );
     }
 }
 // =========================
@@ -662,100 +664,60 @@ const tirage =
 
 function lancerTirageDouble() {
 
-    loadCSV(
-        function(rows) {
+    loadCSV(function(rows) {
 
-            buildEspeceTable(rows);
+        buildEspeceTable(rows);
 
-            const select =
-                document.getElementById(
-                    "selectCouples"
-                );
+        const groupe1 =
+            document.getElementById(
+                "groupe1"
+            ).value;
 
-            const couples =
-                [...select.options]
-                .filter(
-                    o => o.selected
-                )
-                .flatMap(
-                    o => o.value.split(",")
-                );
+        const groupe2 =
+            document.getElementById(
+                "groupe2"
+            ).value;
 
-            if (
-                couples.length === 0
-            ) {
+        if (groupe1 === groupe2) {
 
-                alert(
-                    "Aucun groupe sélectionné"
-                );
-
-                return;
-            }
-
-            const groups =
-    buildGroups();
-
-const nombre =
-    getNombreTirage();
-
-// =========================
-// Construction du pool
-// =========================
-
-let pool = [];
-
-couples.forEach(g => {
-
-    if (groups[g]) {
-
-        pool = pool.concat(
-            groups[g]
-        );
-    }
-});
-
-// =========================
-// Suppression des doublons
-// =========================
-
-pool = [
-    ...new Map(
-        pool.map(
-            e => [e.id, e]
-        )
-    ).values()
-];
-
-// =========================
-// Vérification du nombre
-// =========================
-
-if (pool.length < nombre) {
-
-    alert(
-        "Seulement " +
-        pool.length +
-        " espèces disponibles dans la sélection."
-    );
-
-    return;
-}
-
-// =========================
-// Tirage
-// =========================
-
-const tirage =
-    tirageAleatoire(
-        pool,
-        nombre
-    );
-
-            afficherResultats(
-                tirage
+            alert(
+                "Choisis deux groupes différents."
             );
+
+            return;
         }
-    );
+
+        const groups =
+            buildGroups();
+
+        const nombre =
+            getNombreTirage();
+
+        const nb1 =
+            Math.floor(nombre / 2);
+
+        const nb2 =
+            nombre - nb1;
+
+        const tirage1 =
+            tirageAleatoire(
+                groups[groupe1],
+                nb1
+            );
+
+        const tirage2 =
+            tirageAleatoire(
+                groups[groupe2],
+                nb2
+            );
+
+        const tirage =
+            [...tirage1, ...tirage2];
+
+        afficherResultats(
+            tirage
+        );
+    });
 }
 
 

@@ -11,8 +11,6 @@
 
     <h1>Tirage d'espèces</h1>
 
-
-
     <p>Nombre d'espèces à tirer :</p>
 
     <select id="selectTirage">
@@ -26,6 +24,8 @@
     </select>
 
     <br><br>
+
+    <h3>Tirage simple</h3>
 
     <p>Groupes d'espèces :</p>
 
@@ -46,44 +46,42 @@
         Tirer les espèces
     </button>
 
+    <hr>
+
+    <h3>Double tirage</h3>
+
+    <label>Groupe 1 :</label>
+
+    <select id="groupe1">
+        <option value="Marsupiaux">Marsupiaux</option>
+        <option value="Mammifères">Mammifères</option>
+        <option value="Oiseaux">Oiseaux</option>
+        <option value="Reptiles">Reptiles</option>
+        <option value="Poisson">Poisson</option>
+        <option value="Invertébrés">Invertébrés</option>
+        <option value="Plantes">Plantes</option>
+        <option value="Champignons">Champignons</option>
+    </select>
+
     <br><br>
 
-    <p>Groupes combinés :</p>
+    <label>Groupe 2 :</label>
 
-    <select id="selectCouples" multiple size="4">
-        <option value="Marsupiaux,Mammifères">
-            Marsupiaux et Mammifères
-        </option>
-
-        <option value="Oiseaux,Reptiles">
-            Oiseaux et Reptiles
-        </option>
-
-        <option value="Poisson,Invertébrés">
-            Poisson et Invertébrés
-        </option>
-
-        <option value="Plantes,Champignons">
-            Plantes et Champignons
-        </option>
+    <select id="groupe2">
+        <option value="Marsupiaux">Marsupiaux</option>
+        <option value="Mammifères">Mammifères</option>
+        <option value="Oiseaux">Oiseaux</option>
+        <option value="Reptiles">Reptiles</option>
+        <option value="Poisson">Poisson</option>
+        <option value="Invertébrés">Invertébrés</option>
+        <option value="Plantes">Plantes</option>
+        <option value="Champignons">Champignons</option>
     </select>
 
     <br><br>
 
     <button onclick="lancerTirageDouble()">
-        Tirer les espèces
-    </button>
-
-    <hr>
-
-    <h2>Résultats</h2>
-
-    <div id="resultats"></div>
-
-    <br>
-
-    <button id="btnDownload" style="display:none;">
-        Télécharger les TaxIDs
+        Lancer le double tirage
     </button>
 
     <hr>
@@ -91,13 +89,18 @@
     <h2>Arbre phylogénétique</h2>
 
     <div id="tree-container"
-     style="
-        width:100%;
-        text-align:center;
-        overflow:auto;
-        max-height:900px;
-     ">
-</div>
+         style="width:100%;text-align:center;">
+    </div>
+
+    <hr>
+
+    <h2>Espèces tirées</h2>
+
+    <div id="resultats"></div>
+
+    <button id="btnDownload" style="display:none;">
+        Télécharger les TaxIDs
+    </button>
 
     <hr>
 
@@ -126,4 +129,5 @@
     <script src="https://cdn.jsdelivr.net/gh/SmitsP/phyloCanvas/jsphylosvg-min.js"></script>
 
 </body>
+
 </html>
