@@ -533,15 +533,37 @@ function corrigerQuiz() {
 
 
 // =========================
-// Solus
+// Solution + arbre corrigé
 // =========================
 
 function voirSolution() {
 
     let html =
-        "<h3>Arbre corrigé</h3>";
+        "<h3>Solution</h3>";
+
+    for (const numero in mappingCourant) {
+
+        const taxid =
+            mappingCourant[numero];
+
+        const e =
+            especes[taxid];
+
+        if (!e) continue;
+
+        html +=
+            "<b>" +
+            numero +
+            "</b> → " +
+            e.commonName +
+            " (" +
+            e.latinName +
+            ")" +
+            "<br>";
+    }
 
     html +=
+        "<br><h3>Arbre corrigé</h3>" +
         "<img src='/static/solution.png?t=" +
         Date.now() +
         "' style='max-width:100%;border:1px solid #000'>";

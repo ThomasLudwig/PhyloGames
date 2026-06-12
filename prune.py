@@ -185,4 +185,4 @@ solution_tree.render(
     w=1200,
     units="px",
     tree_style=ts
-)
+) 
