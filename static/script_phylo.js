@@ -10,6 +10,10 @@ const especes = {};
 let mappingCourant = {};
 let equivalences = {};
 
+let solutionImage = "";
+let mappingFile = "";
+let equivalentsFile = "";
+
 
 // =========================
 // Lecture du fichier csv
@@ -247,30 +251,37 @@ function afficherResultats(tirage) {
     contenuFichier =
         listeTaxIds.join(",");
 
-    document.getElementById("btnDownload")
-        .style.display = "inline-block";
+    document.getElementById(
+        "btnDownload"
+    ).style.display = "inline-block";
 
     const noms =
         tirage.map(e => e.toString())
         .join("<br>");
 
-    document.getElementById("resultats").innerHTML =
+    document.getElementById(
+        "resultats"
+    ).innerHTML =
+
         "<h3>Espèces tirées :</h3>" +
         noms +
         "<br><br>" +
         "<h3>Tax IDs :</h3>" +
         listeTaxIds.join(", ");
 
-    fetch("http://127.0.0.1:5000/prune", {
+    fetch("/prune", {
 
         method: "POST",
 
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type":
+            "application/json"
         },
 
         body: JSON.stringify({
-            tax_ids: listeTaxIds
+
+            tax_ids:
+            listeTaxIds
         })
     })
 
@@ -278,27 +289,49 @@ function afficherResultats(tirage) {
 
     .then(data => {
 
-    document.getElementById("tree-container").innerHTML =
-        "<img src='" +
-        data.image +
-        "?t=" +
-        Date.now() +
-        "' style='max-width:95%;height:auto;border:1px solid #ccc'>";
+        if (data.error) {
 
-    return fetch(
-        "/static/mapping.json?t=" +
-        Date.now()
-    );
-})
+            throw new Error(
+                data.error
+            );
+        }
+
+        solutionImage =
+            data.solution;
+
+        mappingFile =
+            data.mapping;
+
+        equivalentsFile =
+            data.equivalents;
+
+        document.getElementById(
+            "tree-container"
+        ).innerHTML =
+
+            "<img src='" +
+            data.tree +
+            "?t=" +
+            Date.now() +
+            "' style='max-width:95%;height:auto;border:1px solid #ccc'>";
+
+        return fetch(
+            mappingFile +
+            "?t=" +
+            Date.now()
+        );
+    })
 
     .then(r => r.json())
 
     .then(mapping => {
 
-        mappingCourant = mapping;
+        mappingCourant =
+            mapping;
 
         return fetch(
-            "/static/equivalents.json?t=" +
+            equivalentsFile +
+            "?t=" +
             Date.now()
         );
     })
@@ -307,17 +340,22 @@ function afficherResultats(tirage) {
 
     .then(eq => {
 
-        equivalences = eq;
+        equivalences =
+            eq;
 
-        genererQuiz(mappingCourant);
+        genererQuiz(
+            mappingCourant
+        );
     })
 
     .catch(error => {
 
         console.error(error);
 
-        document.getElementById("resultats").innerHTML +=
-            "<br><br><b>Erreur Flask</b>";
+        alert(
+            "Erreur : " +
+            error.message
+        );
     });
 }
 
@@ -583,7 +621,9 @@ function voirSolution() {
 
     html +=
         "<br><h3>Arbre corrigé</h3>" +
-        "<img src='/static/solution.png?t=" +
+        "<img src='" +
+        solutionImage +
+        "?t=" +
         Date.now() +
         "' style='max-width:100%;border:1px solid #000'>";
 

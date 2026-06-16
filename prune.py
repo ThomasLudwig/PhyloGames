@@ -1,5 +1,6 @@
 import argparse
 import json
+import os
 
 from ete3 import Tree, TreeStyle
 
@@ -9,9 +10,30 @@ from ete3 import Tree, TreeStyle
 
 parser = argparse.ArgumentParser()
 
-parser.add_argument("-i", "--input", required=True)
-parser.add_argument("-o", "--output", required=True)
-parser.add_argument("-t", "--taxa", nargs="+", required=True)
+parser.add_argument(
+    "-i",
+    "--input",
+    required=True
+)
+
+parser.add_argument(
+    "-o",
+    "--output",
+    required=True
+)
+
+parser.add_argument(
+    "-s",
+    "--session",
+    required=True
+)
+
+parser.add_argument(
+    "-t",
+    "--taxa",
+    nargs="+",
+    required=True
+)
 
 args = parser.parse_args()
 
@@ -19,13 +41,22 @@ args = parser.parse_args()
 # Chargement arbre
 # =========================
 
-tree = Tree(args.input, format=1)
+tree = Tree(
+    args.input,
+    format=1
+)
 
-existing = set(tree.get_leaf_names())
+existing = set(
+    tree.get_leaf_names()
+)
 
-keep = [x for x in args.taxa if x in existing]
+keep = [
+    x for x in args.taxa
+    if x in existing
+]
 
 if len(keep) == 0:
+
     raise ValueError(
         "Aucun taxon valide trouvé dans l'arbre"
     )
@@ -40,6 +71,7 @@ tree.prune(
 )
 
 # Copie avant renommage
+
 solution_tree = tree.copy()
 
 # =========================
@@ -67,8 +99,15 @@ for node in tree.traverse():
         a = enfants[0].name
         b = enfants[1].name
 
-        equivalents.setdefault(a, []).append(b)
-        equivalents.setdefault(b, []).append(a)
+        equivalents.setdefault(
+            a,
+            []
+        ).append(b)
+
+        equivalents.setdefault(
+            b,
+            []
+        ).append(a)
 
 # =========================
 # Mapping numéro -> taxid
@@ -90,7 +129,10 @@ for i, leaf in enumerate(
 # =========================
 
 with open(
-    "static/mapping.json",
+    os.path.join(
+        args.session,
+        "mapping.json"
+    ),
     "w",
     encoding="utf-8"
 ) as f:
@@ -107,7 +149,10 @@ with open(
 # =========================
 
 with open(
-    "static/equivalents.json",
+    os.path.join(
+        args.session,
+        "equivalents.json"
+    ),
     "w",
     encoding="utf-8"
 ) as f:
@@ -150,17 +195,19 @@ for leaf in solution_tree.iter_leaves():
         leaf.name = noms[taxid]
 
 # =========================
-# Uniformisation des branches
+# Uniformisation branches
 # =========================
 
 for node in tree.traverse():
+
     node.dist = 1
 
 for node in solution_tree.traverse():
+
     node.dist = 1
 
 # =========================
-# Sauvegarde arbre nwk
+# Sauvegarde NWK
 # =========================
 
 tree.write(
@@ -195,7 +242,10 @@ hauteur = max(
 # =========================
 
 tree.render(
-    "static/tree.png",
+    os.path.join(
+        args.session,
+        "tree.png"
+    ),
     w=largeur,
     h=hauteur,
     units="px",
@@ -207,7 +257,10 @@ tree.render(
 # =========================
 
 solution_tree.render(
-    "static/solution.png",
+    os.path.join(
+        args.session,
+        "solution.png"
+    ),
     w=largeur,
     h=hauteur,
     units="px",
