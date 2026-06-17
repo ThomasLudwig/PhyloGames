@@ -10,6 +10,7 @@ import os
 import time
 import random
 import string
+import sys
 
 app = Flask(__name__)
 # =========================
@@ -106,9 +107,9 @@ def prune():
         exist_ok=True
     )
 
+
     cmd = [
-        "py",
-        "-3.11",
+        sys.executable,
         "prune.py",
 
         "-i",
