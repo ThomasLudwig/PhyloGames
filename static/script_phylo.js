@@ -9,6 +9,7 @@ const especes = {};
 
 let mappingCourant = {};
 let equivalences = {};
+let solutionURL = "";
 
 let solutionImage = "";
 let mappingFile = "";
@@ -242,8 +243,17 @@ function tirageGroupes(groups, choisis, total = 10) {
 // =========================
 // Affichage resultat
 // =========================
-
 function afficherResultats(tirage) {
+
+    // Nettoyage ancienne correction
+
+    document.getElementById(
+        "score"
+    ).innerHTML = "";
+
+    document.getElementById(
+        "solution"
+    ).innerHTML = "";
 
     listeTaxIds =
         tirage.map(e => e.id);
@@ -253,10 +263,12 @@ function afficherResultats(tirage) {
 
     document.getElementById(
         "btnDownload"
-    ).style.display = "inline-block";
+    ).style.display =
+        "inline-block";
 
     const noms =
-        tirage.map(e => e.toString())
+        tirage
+        .map(e => e.toString())
         .join("<br>");
 
     document.getElementById(
@@ -264,39 +276,50 @@ function afficherResultats(tirage) {
     ).innerHTML =
 
         "<h3>Espèces tirées :</h3>" +
+
         noms +
+
         "<br><br>" +
+
         "<h3>Tax IDs :</h3>" +
+
         listeTaxIds.join(", ");
 
-    fetch("/prune", {
+    fetch(
+        "http://127.0.0.1:5000/prune",
+        {
+            method: "POST",
 
-        method: "POST",
+            headers: {
+                "Content-Type":
+                "application/json"
+            },
 
-        headers: {
-            "Content-Type":
-            "application/json"
-        },
-
-        body: JSON.stringify({
-
-            tax_ids:
-            listeTaxIds
-        })
-    })
+            body: JSON.stringify({
+                tax_ids: listeTaxIds
+            })
+        }
+    )
 
     .then(response => response.json())
 
     .then(data => {
 
-        if (data.error) {
+        document.getElementById(
+            "tree-container"
+        ).innerHTML =
 
-            throw new Error(
-                data.error
-            );
-        }
+            "<img src='" +
 
-        solutionImage =
+            data.tree +
+
+            "?t=" +
+
+            Date.now() +
+
+            "' style='max-width:95%;height:auto;border:1px solid #ccc'>";
+
+        solutionURL =
             data.solution;
 
         mappingFile =
@@ -304,16 +327,6 @@ function afficherResultats(tirage) {
 
         equivalentsFile =
             data.equivalents;
-
-        document.getElementById(
-            "tree-container"
-        ).innerHTML =
-
-            "<img src='" +
-            data.tree +
-            "?t=" +
-            Date.now() +
-            "' style='max-width:95%;height:auto;border:1px solid #ccc'>";
 
         return fetch(
             mappingFile +
@@ -350,16 +363,17 @@ function afficherResultats(tirage) {
 
     .catch(error => {
 
-        console.error(error);
-
-        alert(
-            "Erreur : " +
-            error.message
+        console.error(
+            error
         );
+
+        document.getElementById(
+            "resultats"
+        ).innerHTML +=
+
+            "<br><br><b>Erreur Flask</b>";
     });
 }
-
-
 // =========================
 // Fonction quiz
 // =========================
@@ -622,7 +636,7 @@ function voirSolution() {
     html +=
         "<br><h3>Arbre corrigé</h3>" +
         "<img src='" +
-        solutionImage +
+        solutionURL +
         "?t=" +
         Date.now() +
         "' style='max-width:100%;border:1px solid #000'>";
@@ -631,7 +645,6 @@ function voirSolution() {
         .getElementById("solution")
         .innerHTML = html;
 }
-
 // =========================
 // Choix nombre tirage
 // =========================
@@ -643,7 +656,44 @@ function getNombreTirage() {
         ).value
     );
 }
+// =========================
+// Nettoyage interface
+// =========================
 
+function nettoyerInterface() {
+
+    document.getElementById(
+        "resultats"
+    ).innerHTML = "";
+
+    document.getElementById(
+        "quiz"
+    ).innerHTML = "";
+
+    document.getElementById(
+        "score"
+    ).innerHTML = "";
+
+    document.getElementById(
+        "solution"
+    ).innerHTML = "";
+
+    document.getElementById(
+        "tree-container"
+    ).innerHTML = "";
+
+    document.getElementById(
+        "btnDownload"
+    ).style.display = "none";
+
+    mappingCourant = {};
+
+    equivalences = {};
+
+    listeTaxIds = [];
+
+    contenuFichier = "";
+}
 
 // =========================
 // Tirage simple
