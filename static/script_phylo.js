@@ -243,9 +243,10 @@ function tirageGroupes(groups, choisis, total = 10) {
 // =========================
 // Affichage resultat
 // =========================
+
 function afficherResultats(tirage) {
 
-    // Nettoyage ancienne correction
+    // Nettoyage ancienne partie
 
     document.getElementById(
         "score"
@@ -254,6 +255,12 @@ function afficherResultats(tirage) {
     document.getElementById(
         "solution"
     ).innerHTML = "";
+
+    // Cache la zone de configuration
+
+    document.getElementById(
+        "zoneConfiguration"
+    ).style.display = "none";
 
     listeTaxIds =
         tirage.map(e => e.id);
@@ -317,7 +324,7 @@ function afficherResultats(tirage) {
 
             Date.now() +
 
-            "' style='max-width:95%;height:auto;border:1px solid #ccc'>";
+            "' style='max-width:100%;height:auto;'>";
 
         solutionURL =
             data.solution;
@@ -519,6 +526,7 @@ function corrigerQuiz() {
             choixUtilises[valeur] &&
             choixUtilises[valeur].length > 1
         ) {
+
             doublon = true;
         }
 
@@ -532,13 +540,13 @@ function corrigerQuiz() {
 
             } else {
 
-
                 const soeurs =
                     equivalences[bonneReponse] || [];
 
                 if (
                     soeurs.includes(valeur)
                 ) {
+
                     correct = true;
                 }
             }
@@ -570,9 +578,15 @@ function corrigerQuiz() {
 
     if (pourcentage === 100) {
 
-    message =
-        total + "/" + total + " !";
-} else if (pourcentage >= 75) {
+        message =
+            total + "/" + total + " !";
+
+        document.getElementById(
+            "btnNouvellePartie"
+        ).style.display =
+            "inline-block";
+
+    } else if (pourcentage >= 75) {
 
         message =
             "Presque parfait";
@@ -580,28 +594,40 @@ function corrigerQuiz() {
     } else if (pourcentage >= 50) {
 
         message =
-            "5/10 !";
+            "Pas mal";
 
     } else {
 
         message =
-            "insuffisant";
+            "Insuffisant";
     }
 
-    document.getElementById("score").innerHTML =
+    document.getElementById(
+        "score"
+    ).innerHTML =
+
         "<h3>Score : " +
+
         score +
+
         " / " +
+
         total +
+
         "</h3>" +
+
         "<h3>" +
+
         pourcentage +
+
         "%</h3>" +
+
         "<b>" +
+
         message +
+
         "</b>";
 }
-
 
 // =========================
 // Solution + arbre corrigé
@@ -694,7 +720,24 @@ function nettoyerInterface() {
 
     contenuFichier = "";
 }
+// =========================
+// Nouvelle partie
+// =========================
 
+function nouvellePartie() {
+
+    nettoyerInterface();
+
+    document.getElementById(
+        "zoneConfiguration"
+    ).style.display =
+        "block";
+
+    document.getElementById(
+        "btnNouvellePartie"
+    ).style.display =
+        "none";
+}
 // =========================
 // Tirage simple
 // =========================
@@ -879,4 +922,17 @@ document
             lien.href
         );
     }
+);
+
+// =========================
+// Bouton nouvelle partie
+// =========================
+
+document
+.getElementById(
+    "btnNouvellePartie"
+)
+.addEventListener(
+    "click",
+    nouvellePartie
 );
