@@ -2,138 +2,211 @@
 <html lang="fr">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
     <title>Quiz phylogénétique</title>
+
+    <link
+        rel="stylesheet"
+        href="/static/css.css">
+
 </head>
 
 <body>
 
-    <h1>Tirage d'espèces</h1>
+    <h1>Quiz phylogénétique</h1>
 
-    <p>Nombre d'espèces à tirer :</p>
+    <!-- ========================= -->
+    <!-- Configuration -->
+    <!-- ========================= -->
 
-    <select id="selectTirage">
-        <option value="4">4 espèces</option>
-        <option value="6">6 espèces</option>
-        <option value="8">8 espèces</option>
-        <option value="10" selected>10 espèces</option>
-        <option value="12">12 espèces</option>
-        <option value="15">15 espèces</option>
-        <option value="20">20 espèces</option>
-    </select>
+    <div id="zoneConfiguration">
 
-    <br><br>
+        <div class="config">
 
-    <h3>Tirage simple</h3>
+            <div class="bloc">
 
-    <p>Groupes d'espèces :</p>
+                <h3>Tirage simple</h3>
 
-    <select id="selectGroupes" multiple size="8">
-        <option value="Marsupiaux">Marsupiaux</option>
-        <option value="Mammifères">Mammifères</option>
-        <option value="Oiseaux">Oiseaux</option>
-        <option value="Reptiles">Reptiles</option>
-        <option value="Poisson">Poisson</option>
-        <option value="Invertébrés">Invertébrés</option>
-        <option value="Plantes">Plantes</option>
-        <option value="Champignons">Champignons</option>
-    </select>
+                <p>Nombre d'espèces :</p>
 
-    <br><br>
+                <select id="selectTirage">
 
-    <button onclick="lancerTirage()">
-        Tirer les espèces
-    </button>
+                    <option value="4">4 espèces</option>
+                    <option value="6">6 espèces</option>
+                    <option value="8">8 espèces</option>
+                    <option value="10" selected>10 espèces</option>
+                    <option value="12">12 espèces</option>
+                    <option value="15">15 espèces</option>
+                    <option value="20">20 espèces</option>
 
-    <hr>
+                </select>
 
-    <h3>Double tirage</h3>
+                <br><br>
 
-    <label>Groupe 1 :</label>
+                <p>Groupes :</p>
 
-    <select id="groupe1">
-        <option value="Marsupiaux">Marsupiaux</option>
-        <option value="Mammifères">Mammifères</option>
-        <option value="Oiseaux">Oiseaux</option>
-        <option value="Reptiles">Reptiles</option>
-        <option value="Poisson">Poisson</option>
-        <option value="Invertébrés">Invertébrés</option>
-        <option value="Plantes">Plantes</option>
-        <option value="Champignons">Champignons</option>
-    </select>
+                <select
+                    id="selectGroupes"
+                    multiple
+                    size="8">
 
-    <br><br>
+                    <option value="Marsupiaux">Marsupiaux</option>
+                    <option value="Mammifères">Mammifères</option>
+                    <option value="Oiseaux">Oiseaux</option>
+                    <option value="Reptiles">Reptiles</option>
+                    <option value="Poisson">Poisson</option>
+                    <option value="Invertébrés">Invertébrés</option>
+                    <option value="Plantes">Plantes</option>
+                    <option value="Champignons">Champignons</option>
 
-    <label>Groupe 2 :</label>
+                </select>
 
-    <select id="groupe2">
-        <option value="Marsupiaux">Marsupiaux</option>
-        <option value="Mammifères">Mammifères</option>
-        <option value="Oiseaux">Oiseaux</option>
-        <option value="Reptiles">Reptiles</option>
-        <option value="Poisson">Poisson</option>
-        <option value="Invertébrés">Invertébrés</option>
-        <option value="Plantes">Plantes</option>
-        <option value="Champignons">Champignons</option>
-    </select>
+                <br><br>
 
-    <br><br>
+                <button onclick="lancerTirage()">
+                    Tirage simple
+                </button>
 
-    <button onclick="lancerTirageDouble()">
-        Lancer le double tirage
-    </button>
+            </div>
 
-    <hr>
+            <div class="bloc">
 
-    <h2>Arbre phylogénétique</h2>
+                <h3>Double tirage</h3>
 
-    <div id="tree-container"
-         style="width:100%;text-align:center;">
+                <label>Groupe 1 :</label>
+
+                <br><br>
+
+                <select id="groupe1">
+
+                    <option value="Marsupiaux">Marsupiaux</option>
+                    <option value="Mammifères">Mammifères</option>
+                    <option value="Oiseaux">Oiseaux</option>
+                    <option value="Reptiles">Reptiles</option>
+                    <option value="Poisson">Poisson</option>
+                    <option value="Invertébrés">Invertébrés</option>
+                    <option value="Plantes">Plantes</option>
+                    <option value="Champignons">Champignons</option>
+
+                </select>
+
+                <br><br>
+
+                <label>Groupe 2 :</label>
+
+                <br><br>
+
+                <select id="groupe2">
+
+                    <option value="Marsupiaux">Marsupiaux</option>
+                    <option value="Mammifères">Mammifères</option>
+                    <option value="Oiseaux">Oiseaux</option>
+                    <option value="Reptiles">Reptiles</option>
+                    <option value="Poisson">Poisson</option>
+                    <option value="Invertébrés">Invertébrés</option>
+                    <option value="Plantes">Plantes</option>
+                    <option value="Champignons">Champignons</option>
+
+                </select>
+
+                <br><br>
+
+                <button onclick="lancerTirageDouble()">
+                    Double tirage
+                </button>
+
+            </div>
+
+        </div>
+
     </div>
 
-    <hr>
+    <!-- ========================= -->
+    <!-- Actions -->
+    <!-- ========================= -->
 
-    <h2>Espèces tirées</h2>
+    <div class="actions">
 
-    <div id="resultats"></div>
+        <button id="btnCorrection">
+            Corriger
+        </button>
 
-    <button id="btnDownload" style="display:none;">
-        Télécharger les TaxIDs
-    </button>
+        <button id="btnSolution">
+            Voir la solution
+        </button>
 
-    <hr>
+        <button
+            id="btnDownload"
+            style="display:none;">
 
-    <h3>Associer chaque numéro à une espèce</h3>
+            Télécharger les TaxIDs
 
-    <div id="quiz"></div>
+        </button>
 
-    <br>
+        <button
+            id="btnNouvellePartie"
+            style="display:none;">
 
-    <button id="btnCorrection">
-        Corriger
-    </button>
+            Nouvelle partie
+
+        </button>
+
+    </div>
+
+    <!-- ========================= -->
+    <!-- Zone de jeu -->
+    <!-- ========================= -->
+
+    <div class="jeu">
+
+        <!-- Quiz -->
+
+        <div class="colonne-quiz">
+
+            <h2>Quiz</h2>
+
+            <div id="quiz"></div>
+
+        </div>
+
+        <!-- Arbre -->
+
+        <div class="colonne-arbre">
+
+            <h2>Arbre phylogénétique</h2>
+
+            <div id="tree-container"></div>
+
+        </div>
+
+    </div>
+
+    <!-- ========================= -->
+    <!-- Score -->
+    <!-- ========================= -->
 
     <div id="score"></div>
 
-    <br>
-
-    <button id="btnSolution">
-        Voir la solution
-    </button>
+    <!-- ========================= -->
+    <!-- Solution -->
+    <!-- ========================= -->
 
     <div id="solution"></div>
 
+    <!-- ========================= -->
+    <!-- Résultats techniques -->
+    <!-- ========================= -->
+
+    <div id="resultats"></div>
+
     <script src="/static/script_phylo.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/gh/SmitsP/phyloCanvas/jsphylosvg-min.js"></script>
-    
-    <button
-    id="btnDownload"
-    style="display:none;">
-    Télécharger
-
-    </button>
 </body>
 
 </html>
