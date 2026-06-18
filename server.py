@@ -13,6 +13,7 @@ import string
 import sys
 
 app = Flask(__name__)
+
 # =========================
 # Fichiers de session
 # =========================
@@ -32,6 +33,7 @@ def session_files(
             filename
         )
     )
+
 # =========================
 # Génération session
 # =========================
@@ -107,7 +109,6 @@ def prune():
         exist_ok=True
     )
 
-
     cmd = [
         sys.executable,
         "prune.py",
@@ -153,9 +154,16 @@ def prune():
         f"/sessions/{session_id}/mapping.json",
 
         "equivalents":
-        f"/sessions/{session_id}/equivalents.json"
+        f"/sessions/{session_id}/equivalents.json",
+
+        "clades":
+        f"/sessions/{session_id}/clades.json"
     }
 
+
+# =========================
+# Lancement Flask
+# =========================
 
 if __name__ == "__main__":
 
