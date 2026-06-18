@@ -11,6 +11,9 @@ let mappingCourant = {};
 let equivalences = {};
 let solutionURL = "";
 
+let clades = [];
+let cladesFile = "";
+
 let solutionImage = "";
 let mappingFile = "";
 let equivalentsFile = "";
@@ -246,8 +249,6 @@ function tirageGroupes(groups, choisis, total = 10) {
 
 function afficherResultats(tirage) {
 
-    // Nettoyage ancienne partie
-
     document.getElementById(
         "score"
     ).innerHTML = "";
@@ -255,8 +256,6 @@ function afficherResultats(tirage) {
     document.getElementById(
         "solution"
     ).innerHTML = "";
-
-    // Cache la zone de configuration
 
     document.getElementById(
         "zoneConfiguration"
@@ -335,6 +334,9 @@ function afficherResultats(tirage) {
         equivalentsFile =
             data.equivalents;
 
+        cladesFile =
+            data.clades;
+
         return fetch(
             mappingFile +
             "?t=" +
@@ -362,6 +364,20 @@ function afficherResultats(tirage) {
 
         equivalences =
             eq;
+
+        return fetch(
+            cladesFile +
+            "?t=" +
+            Date.now()
+        );
+    })
+
+    .then(r => r.json())
+
+    .then(c => {
+
+        clades =
+            c;
 
         genererQuiz(
             mappingCourant
@@ -486,24 +502,22 @@ function gererDoublons(event) {
 function corrigerQuiz() {
 
     const selects =
-        document.querySelectorAll(".reponse");
+        document.querySelectorAll(
+            ".reponse"
+        );
 
     let score = 0;
 
-    const choixUtilises = {};
+    const dejaValide = new Set();
+
+    const reponsesUtilisateur = {};
 
     selects.forEach(select => {
 
-        const valeur = select.value;
+        reponsesUtilisateur[
+            select.dataset.numero
+        ] = select.value;
 
-        if (!valeur) return;
-
-        if (!choixUtilises[valeur]) {
-
-            choixUtilises[valeur] = [];
-        }
-
-        choixUtilises[valeur].push(select);
     });
 
     selects.forEach(select => {
@@ -519,36 +533,29 @@ function corrigerQuiz() {
         const valeur =
             select.value;
 
-        let doublon = false;
-
-        if (
-            valeur &&
-            choixUtilises[valeur] &&
-            choixUtilises[valeur].length > 1
-        ) {
-
-            doublon = true;
-        }
-
         let correct = false;
 
-        if (!doublon) {
+        if (
+            valeur === bonneReponse
+        ) {
 
-            if (valeur === bonneReponse) {
+            correct = true;
+        }
+
+        else {
+
+            const soeurs =
+                equivalences[
+                    bonneReponse
+                ] || [];
+
+            if (
+                soeurs.includes(
+                    valeur
+                )
+            ) {
 
                 correct = true;
-
-            } else {
-
-                const soeurs =
-                    equivalences[bonneReponse] || [];
-
-                if (
-                    soeurs.includes(valeur)
-                ) {
-
-                    correct = true;
-                }
             }
         }
 
@@ -557,46 +564,147 @@ function corrigerQuiz() {
             select.style.backgroundColor =
                 "#90EE90";
 
-            score++;
+            dejaValide.add(numero);
 
-        } else {
+            score++;
+        }
+
+        else {
 
             select.style.backgroundColor =
                 "#FFB6B6";
         }
     });
 
+    // =====================
+    // Validation clades
+    // =====================
+
+    clades.forEach(clade => {
+
+        const numerosDuClade = [];
+
+        for (
+            const numero
+            in mappingCourant
+        ) {
+
+            if (
+                clade.includes(
+                    mappingCourant[numero]
+                )
+            ) {
+
+                numerosDuClade.push(
+                    numero
+                );
+            }
+        }
+
+        const attendu =
+            numerosDuClade
+            .map(
+                n => mappingCourant[n]
+            )
+            .sort()
+            .join(",");
+
+        const obtenu =
+            numerosDuClade
+            .map(
+                n =>
+                reponsesUtilisateur[n]
+            )
+            .filter(Boolean)
+            .sort()
+            .join(",");
+
+        if (
+            attendu === obtenu
+        ) {
+
+            numerosDuClade
+            .forEach(numero => {
+
+                if (
+                    !dejaValide.has(
+                        numero
+                    )
+                ) {
+
+                    dejaValide.add(
+                        numero
+                    );
+
+                    score++;
+
+                    document
+                    .querySelector(
+                        "[data-numero='" +
+                        numero +
+                        "']"
+                    )
+                    .style.backgroundColor =
+                        "#90EE90";
+                }
+            });
+        }
+    });
+
     const total =
-        Object.keys(mappingCourant).length;
+        Object.keys(
+            mappingCourant
+        ).length;
+
+    if (
+        score > total
+    ) {
+
+        score = total;
+    }
 
     const pourcentage =
         Math.round(
-            (score / total) * 100
+            score /
+            total *
+            100
         );
 
     let message = "";
 
-    if (pourcentage === 100) {
+    if (
+        pourcentage === 100
+    ) {
 
         message =
-            total + "/" + total + " !";
+            total +
+            "/" +
+            total +
+            " !";
 
         document.getElementById(
             "btnNouvellePartie"
         ).style.display =
             "inline-block";
+    }
 
-    } else if (pourcentage >= 75) {
+    else if (
+        pourcentage >= 75
+    ) {
 
         message =
             "Presque parfait";
+    }
 
-    } else if (pourcentage >= 50) {
+    else if (
+        pourcentage >= 50
+    ) {
 
         message =
             "Pas mal";
+    }
 
-    } else {
+    else {
 
         message =
             "Insuffisant";

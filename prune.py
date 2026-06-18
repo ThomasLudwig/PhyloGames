@@ -75,10 +75,11 @@ tree.prune(
 solution_tree = tree.copy()
 
 # =========================
-# Equivalences
+# Equivalences + Clades
 # =========================
 
 equivalents = {}
+clades = []
 
 for node in tree.traverse():
 
@@ -89,6 +90,8 @@ for node in tree.traverse():
 
     if len(enfants) != 2:
         continue
+
+    # feuilles soeurs
 
     if (
         enfants[0].is_leaf()
@@ -108,6 +111,16 @@ for node in tree.traverse():
             b,
             []
         ).append(a)
+
+    # clade complet
+
+    feuilles = sorted(
+        node.get_leaf_names()
+    )
+
+    if len(feuilles) > 1:
+
+        clades.append(feuilles)
 
 # =========================
 # Mapping numéro -> taxid
@@ -164,6 +177,25 @@ with open(
         indent=4
     )
 
+# =========================
+# Sauvegarde clades
+# =========================
+
+with open(
+    os.path.join(
+        args.session,
+        "clades.json"
+    ),
+    "w",
+    encoding="utf-8"
+) as f:
+
+    json.dump(
+        clades,
+        f,
+        ensure_ascii=False,
+        indent=4
+    )
 # =========================
 # Chargement noms espèces
 # =========================
