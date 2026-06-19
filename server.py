@@ -87,80 +87,232 @@ def accueil():
 )
 def prune():
 
-    tax_ids = request.json.get(
-        "tax_ids",
-        []
-    )
+    try:
 
-    session_id = get_session_id()
+        tax_ids = request.json.get(
+            "tax_ids",
+            []
+        )
 
-    base_dir = os.path.dirname(
-        os.path.abspath(__file__)
-    )
+        print("\n" + "=" * 60)
+        print("NOUVEAU TIRAGE")
+        print("=" * 60)
 
-    session_dir = os.path.join(
-        base_dir,
-        "sessions",
-        session_id
-    )
+        print(
+            f"Nombre de taxons reçus : {len(tax_ids)}"
+        )
 
-    os.makedirs(
-        session_dir,
-        exist_ok=True
-    )
+        print(
+            "Taxons :"
+        )
 
-    cmd = [
-        sys.executable,
-        "prune.py",
+        for t in tax_ids:
+            print("  -", t)
 
-        "-i",
-        "taxid.nwk",
+        session_id = get_session_id()
 
-        "-o",
-        os.path.join(
+        base_dir = os.path.dirname(
+            os.path.abspath(__file__)
+        )
+
+        session_dir = os.path.join(
+            base_dir,
+            "sessions",
+            session_id
+        )
+
+        os.makedirs(
             session_dir,
-            "extract.nwk"
-        ),
+            exist_ok=True
+        )
 
-        "-s",
-        session_dir,
+        cmd = [
+            sys.executable,
+            "prune.py",
 
-        "-t"
-    ] + tax_ids
+            "-i",
+            "taxid.nwk",
 
-    result = subprocess.run(
-        cmd,
-        capture_output=True,
-        text=True,
-        cwd=base_dir
-    )
+            "-o",
+            os.path.join(
+                session_dir,
+                "extract.nwk"
+            ),
 
-    if result.returncode != 0:
+            "-s",
+            session_dir,
+
+            "-t"
+        ] + tax_ids
+
+        print("\nCommande exécutée :")
+        print(" ".join(cmd))
+
+        result = subprocess.run(
+            cmd,
+            capture_output=True,
+            text=True,
+            cwd=base_dir
+        )
+
+        print("\nCode retour :")
+        print(result.returncode)
+
+        if result.stdout:
+
+            print("\nSTDOUT :")
+            print(result.stdout)
+
+        if result.stderr:
+
+            print("\nSTDERR :")
+            print(result.stderr)
+
+        if result.returncode != 0:
+
+            print(
+                "\nERREUR prune.py"
+            )
+
+            return {
+                "error":
+                result.stderr
+            }, 500
+
+        print(
+            "\nFichiers générés :"
+        )
+
+        fichiers = [
+            "tree.png",
+            "solution.png",
+            "mapping.json",
+            "equivalents.json",
+            "clades.json"
+        ]
+
+        for fichier in fichiers:
+
+            path = os.path.join(
+                session_dir,
+                fichier
+            )
+
+            print(
+                fichier,
+                "->",
+                os.path.exists(path)
+            )
+
+        mapping_path = os.path.join(
+            session_dir,
+            "mapping.json"
+        )
+
+        if os.path.exists(mapping_path):
+
+            import json
+
+            with open(
+                mapping_path,
+                encoding="utf-8"
+            ) as f:
+
+                mapping = json.load(f)
+
+            print("\nRÉPONSES DU QUIZ :")
+
+            for numero, taxid in mapping.items():
+
+                print(
+                    f"{numero} -> {taxid}"
+                )
+
+        print(
+            "\nSession :",
+            session_id
+        )
+
+        print("=" * 60)
 
         return {
-            "error": result.stderr
+
+            "session":
+            session_id,
+
+            "tree":
+            f"/sessions/{session_id}/tree.png",
+
+            "solution":
+            f"/sessions/{session_id}/solution.png",
+
+            "mapping":
+            f"/sessions/{session_id}/mapping.json",
+
+            "equivalents":
+            f"/sessions/{session_id}/equivalents.json",
+
+            "clades":
+            f"/sessions/{session_id}/clades.json"
+        }
+
+    except Exception as e:
+
+        import traceback
+
+        print("\nERREUR FLASK")
+        print(traceback.format_exc())
+
+        return {
+            "error": str(e)
         }, 500
+    
+# =========================
+# Gestion erreurs Flask
+# =========================
+
+@app.errorhandler(404)
+def error404(e):
+
+    print(
+        "\n[404] Ressource introuvable :",
+        request.url
+    )
 
     return {
-        "session": session_id,
-
-        "tree":
-        f"/sessions/{session_id}/tree.png",
-
-        "solution":
-        f"/sessions/{session_id}/solution.png",
-
-        "mapping":
-        f"/sessions/{session_id}/mapping.json",
-
-        "equivalents":
-        f"/sessions/{session_id}/equivalents.json",
-
-        "clades":
-        f"/sessions/{session_id}/clades.json"
-    }
+        "error": "404 Not Found"
+    }, 404
 
 
+@app.errorhandler(500)
+def error500(e):
+
+    print(
+        "\n[500] Erreur interne serveur"
+    )
+
+    return {
+        "error":
+        "500 Internal Server Error"
+    }, 500
+
+
+@app.errorhandler(Exception)
+def error_generique(e):
+
+    import traceback
+
+    print(
+        "\n[EXCEPTION NON GÉRÉE]"
+    )
+
+    print(
+        traceback.format_exc()
+    )
+
+    return {
+        "error": str(e)
+    }, 500
 # =========================
 # Lancement Flask
 # =========================
@@ -172,3 +324,38 @@ if __name__ == "__main__":
         port=5000,
         debug=True
     )
+
+# =========================
+# Erreurs Flask globales
+# =========================
+
+@app.errorhandler(404)
+def erreur404(e):
+
+    print(
+        "\nERREUR 404 :",
+        request.path
+    )
+
+    return {
+        "error":
+        "404 Not Found",
+        "path":
+        request.path
+    }, 404
+
+
+@app.errorhandler(500)
+def erreur500(e):
+
+    print(
+        "\nERREUR 500"
+    )
+
+    import traceback
+    traceback.print_exc()
+
+    return {
+        "error":
+        "500 Internal Server Error"
+    }, 500
