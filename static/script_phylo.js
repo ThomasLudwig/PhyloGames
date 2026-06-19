@@ -13,6 +13,7 @@ let solutionURL = "";
 
 let clades = [];
 let cladesFile = "";
+let ordreUtilisateur = {};
 
 let solutionImage = "";
 let mappingFile = "";
@@ -398,12 +399,14 @@ function afficherResultats(tirage) {
     });
 }
 // =========================
-// Fonction quiz
+// Génération du quiz Drag & Drop
 // =========================
 
 function genererQuiz(mapping) {
 
     mappingCourant = mapping;
+
+    ordreUtilisateur = {};
 
     const quiz =
         document.getElementById("quiz");
@@ -413,97 +416,142 @@ function genererQuiz(mapping) {
     const listeEspeces =
         Object.values(mapping);
 
-    const melange =
+    const especesTriees =
         [...listeEspeces]
-        .sort(() => Math.random() - 0.5);
+        .sort((a, b) => {
+
+            const ea = especes[a];
+            const eb = especes[b];
+
+            return ea.commonName.localeCompare(
+                eb.commonName
+            );
+        });
+
+    let dragged = null;
+
+    let index = 0;
 
     for (const numero in mapping) {
+
+        const taxid =
+            especesTriees[index];
+
+        ordreUtilisateur[numero] =
+            taxid;
+
+        const e =
+            especes[taxid];
 
         const ligne =
             document.createElement("div");
 
-        ligne.style.marginBottom = "2px";
+        ligne.className =
+            "ligne-quiz";
 
-        let html =
-            "<b>" + numero + "</b> → ";
+        ligne.dataset.numero =
+            numero;
 
-        html +=
-            "<select class='reponse' data-numero='" +
+        ligne.dataset.taxid =
+            taxid;
+
+        ligne.draggable = true;
+
+        ligne.innerHTML =
+
+            "<span class='numero'>" +
             numero +
-            "'>";
+            " → </span>" +
 
-        html +=
-            "<option value=''>Choisir...</option>";
+            "<span class='nom'>" +
+            e.commonName +
+            " (" +
+            e.latinName +
+            ")" +
+            "</span>";
 
-        melange.forEach(id => {
+        ligne.addEventListener(
+            "dragstart",
+            () => {
 
-            const e = especes[id];
-
-            if (e) {
-
-                html +=
-                    "<option value='" +
-                    id +
-                    "'>" +
-                    e.commonName +
-                    " (" +
-                    e.latinName +
-                    ")" +
-                    "</option>";
+                dragged = ligne;
             }
-        });
+        );
 
-        html += "</select>";
+        ligne.addEventListener(
+            "dragover",
+            (e) => {
 
-        ligne.innerHTML = html;
+                e.preventDefault();
+            }
+        );
+
+        ligne.addEventListener(
+            "drop",
+            () => {
+
+                if (
+                    !dragged ||
+                    dragged === ligne
+                ) {
+                    return;
+                }
+
+                const nom1 =
+                    dragged.querySelector(
+                        ".nom"
+                    ).innerHTML;
+
+                const nom2 =
+                    ligne.querySelector(
+                        ".nom"
+                    ).innerHTML;
+
+                dragged.querySelector(
+                    ".nom"
+                ).innerHTML = nom2;
+
+                ligne.querySelector(
+                    ".nom"
+                ).innerHTML = nom1;
+
+                const tax1 =
+                    dragged.dataset.taxid;
+
+                const tax2 =
+                    ligne.dataset.taxid;
+
+                dragged.dataset.taxid =
+                    tax2;
+
+                ligne.dataset.taxid =
+                    tax1;
+
+                ordreUtilisateur[
+                    dragged.dataset.numero
+                ] = tax2;
+
+                ordreUtilisateur[
+                    ligne.dataset.numero
+                ] = tax1;
+            }
+        );
 
         quiz.appendChild(ligne);
 
-        const select =
-            ligne.querySelector("select");
-
-        select.addEventListener(
-            "change",
-            gererDoublons
-        );
+        index++;
     }
 }
-// =========================
-// verif 
-// =========================
-function gererDoublons(event) {
 
-    const selectActuel = event.target;
-
-    const valeurChoisie =
-        selectActuel.value;
-
-    if (!valeurChoisie) {
-        return;
-    }
-
-    document
-    .querySelectorAll(".reponse")
-    .forEach(select => {
-
-        if (
-            select !== selectActuel &&
-            select.value === valeurChoisie
-        ) {
-
-            select.value = "";
-        }
-    });
-}
 // =========================
 // Correction
 // =========================
 
 function corrigerQuiz() {
 
-    const selects =
+    const lignes =
         document.querySelectorAll(
-            ".reponse"
+            ".ligne-quiz"
         );
 
     let score = 0;
@@ -512,26 +560,26 @@ function corrigerQuiz() {
 
     const reponsesUtilisateur = {};
 
-    selects.forEach(select => {
+    lignes.forEach(ligne => {
 
         reponsesUtilisateur[
-            select.dataset.numero
-        ] = select.value;
-
+            ligne.dataset.numero
+        ] =
+            ligne.dataset.taxid;
     });
 
-    selects.forEach(select => {
+    lignes.forEach(ligne => {
 
-        select.style.backgroundColor = "";
+        ligne.style.backgroundColor = "";
 
         const numero =
-            select.dataset.numero;
+            ligne.dataset.numero;
 
         const bonneReponse =
             mappingCourant[numero];
 
         const valeur =
-            select.value;
+            ligne.dataset.taxid;
 
         let correct = false;
 
@@ -561,7 +609,7 @@ function corrigerQuiz() {
 
         if (correct) {
 
-            select.style.backgroundColor =
+            ligne.style.backgroundColor =
                 "#90EE90";
 
             dejaValide.add(numero);
@@ -571,23 +619,20 @@ function corrigerQuiz() {
 
         else {
 
-            select.style.backgroundColor =
+            ligne.style.backgroundColor =
                 "#FFB6B6";
         }
     });
 
     // =====================
-    // Validation clades
+    // Validation clades + équivalences
     // =====================
 
     clades.forEach(clade => {
 
         const numerosDuClade = [];
 
-        for (
-            const numero
-            in mappingCourant
-        ) {
+        for (const numero in mappingCourant) {
 
             if (
                 clade.includes(
@@ -601,30 +646,37 @@ function corrigerQuiz() {
             }
         }
 
-        const attendu =
-            numerosDuClade
-            .map(
-                n => mappingCourant[n]
-            )
-            .sort()
-            .join(",");
+        let cladeValide = true;
 
-        const obtenu =
-            numerosDuClade
-            .map(
-                n =>
-                reponsesUtilisateur[n]
-            )
-            .filter(Boolean)
-            .sort()
-            .join(",");
+        numerosDuClade.forEach(numero => {
 
-        if (
-            attendu === obtenu
-        ) {
+            const attendu =
+                mappingCourant[numero];
 
-            numerosDuClade
-            .forEach(numero => {
+            const obtenu =
+                reponsesUtilisateur[numero];
+
+            if (!obtenu) {
+
+                cladeValide = false;
+                return;
+            }
+
+            const equivalentes =
+                equivalences[attendu] || [];
+
+            if (
+                obtenu !== attendu &&
+                !equivalentes.includes(obtenu)
+            ) {
+
+                cladeValide = false;
+            }
+        });
+
+        if (cladeValide) {
+
+            numerosDuClade.forEach(numero => {
 
                 if (
                     !dejaValide.has(
@@ -638,14 +690,18 @@ function corrigerQuiz() {
 
                     score++;
 
-                    document
-                    .querySelector(
-                        "[data-numero='" +
-                        numero +
-                        "']"
-                    )
-                    .style.backgroundColor =
-                        "#90EE90";
+                    const ligne =
+                        document.querySelector(
+                            ".ligne-quiz[data-numero='" +
+                            numero +
+                            "']"
+                        );
+
+                    if (ligne) {
+
+                        ligne.style.backgroundColor =
+                            "#90EE90";
+                    }
                 }
             });
         }
@@ -931,6 +987,18 @@ function lancerTirageDouble() {
         const groups =
             buildGroups();
 
+        if (
+            !groups[groupe1] ||
+            !groups[groupe2]
+        ) {
+
+            alert(
+                "Groupe introuvable."
+            );
+
+            return;
+        }
+
         const nombre =
             getNombreTirage();
 
@@ -946,21 +1014,40 @@ function lancerTirageDouble() {
                 nb1
             );
 
+        const idsDejaChoisis =
+            new Set(
+                tirage1.map(
+                    e => e.id
+                )
+            );
+
+        const candidatsGroupe2 =
+            groups[groupe2].filter(
+                e =>
+                    !idsDejaChoisis.has(
+                        e.id
+                    )
+            );
+
         const tirage2 =
             tirageAleatoire(
-                groups[groupe2],
+                candidatsGroupe2,
                 nb2
             );
 
         const tirage =
             [...tirage1, ...tirage2];
 
+        console.log(
+            "Tirage double :",
+            tirage.map(e => e.id)
+        );
+
         afficherResultats(
             tirage
         );
     });
 }
-
 
 // =========================
 // Bouton de correction

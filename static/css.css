@@ -258,3 +258,45 @@ button:hover {
         width: 100%;
     }
 }
+
+.espece {
+    padding: 5px;
+    margin: 3px;
+    background: #ddd;
+    cursor: grab;
+}
+
+.slot {
+    border: 1px solid black;
+    margin: 5px;
+    padding: 5px;
+    min-height: 40px;
+}
+
+.dropzone {
+    min-height: 30px;
+    background: #f5f5f5;
+}
+
+
+.ligne-quiz {
+
+    padding: 8px;
+    margin: 4px 0;
+
+    border: 1px solid #888;
+
+    cursor: move;
+
+    background: white;
+}
+
+.ligne-quiz:hover {
+
+    background: #f0f0f0;
+}
+
+.numero {
+
+    font-weight: bold;
+}
