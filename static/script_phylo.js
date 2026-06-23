@@ -19,7 +19,7 @@ let solutionImage = "";
 let mappingFile = "";
 let equivalentsFile = "";
 
-
+const DEBUG = true;
 // =========================
 // Lecture du fichier csv
 // =========================
@@ -250,6 +250,12 @@ function tirageGroupes(groups, choisis, total = 10) {
 
 function afficherResultats(tirage) {
 
+    console.clear();
+
+    console.log("=================================");
+    console.log("NOUVEAU TIRAGE");
+    console.log("=================================");
+
     document.getElementById(
         "score"
     ).innerHTML = "";
@@ -267,6 +273,18 @@ function afficherResultats(tirage) {
 
     contenuFichier =
         listeTaxIds.join(",");
+
+    console.log(
+        "TaxIds envoyés à Flask :"
+    );
+
+    console.table(
+        tirage.map(e => ({
+            TaxID: e.id,
+            Nom: e.commonName,
+            Latin: e.latinName
+        }))
+    );
 
     document.getElementById(
         "btnDownload"
@@ -308,9 +326,31 @@ function afficherResultats(tirage) {
         }
     )
 
-    .then(response => response.json())
+    .then(response => {
+
+        console.log(
+            "Réponse Flask :",
+            response.status
+        );
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Erreur Flask : " +
+                response.status
+            );
+        }
+
+        return response.json();
+    })
 
     .then(data => {
+
+        console.log(
+            "Fichiers générés :"
+        );
+
+        console.table(data);
 
         document.getElementById(
             "tree-container"
@@ -345,12 +385,26 @@ function afficherResultats(tirage) {
         );
     })
 
-    .then(r => r.json())
+    .then(r => {
+
+        console.log(
+            "Chargement mapping.json :",
+            r.status
+        );
+
+        return r.json();
+    })
 
     .then(mapping => {
 
         mappingCourant =
             mapping;
+
+        console.log(
+            "Mapping reçu :"
+        );
+
+        console.table(mapping);
 
         return fetch(
             equivalentsFile +
@@ -359,12 +413,26 @@ function afficherResultats(tirage) {
         );
     })
 
-    .then(r => r.json())
+    .then(r => {
+
+        console.log(
+            "Chargement equivalents.json :",
+            r.status
+        );
+
+        return r.json();
+    })
 
     .then(eq => {
 
         equivalences =
             eq;
+
+        console.log(
+            "Equivalences :"
+        );
+
+        console.log(eq);
 
         return fetch(
             cladesFile +
@@ -373,12 +441,67 @@ function afficherResultats(tirage) {
         );
     })
 
-    .then(r => r.json())
+    .then(r => {
+
+        console.log(
+            "Chargement clades.json :",
+            r.status
+        );
+
+        return r.json();
+    })
 
     .then(c => {
 
         clades =
             c;
+
+        console.log(
+            "Clades :"
+        );
+
+        console.log(c);
+
+        console.log(
+            "================================="
+        );
+
+        console.log(
+            "SOLUTION DU QUIZ"
+        );
+
+        console.log(
+            "================================="
+        );
+
+        Object.keys(mappingCourant)
+            .sort((a, b) => a - b)
+            .forEach(numero => {
+
+                const taxid =
+                    mappingCourant[numero];
+
+                const e =
+                    especes[taxid];
+
+                if (e) {
+
+                    console.log(
+                        numero +
+                        " -> " +
+                        e.commonName +
+                        " (" +
+                        e.latinName +
+                        ") [" +
+                        taxid +
+                        "]"
+                    );
+                }
+            });
+
+        console.log(
+            "================================="
+        );
 
         genererQuiz(
             mappingCourant
@@ -388,6 +511,7 @@ function afficherResultats(tirage) {
     .catch(error => {
 
         console.error(
+            "ERREUR :",
             error
         );
 
