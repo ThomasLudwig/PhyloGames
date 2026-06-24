@@ -126,12 +126,25 @@ def prune():
             exist_ok=True
         )
 
+        input_tree = request.json.get(
+            "input_tree",
+            "taxid.nwk"
+        )
+
+        allowed_trees = {
+            "taxid.nwk",
+            "linear_test.nwk"
+        }
+
+        if input_tree not in allowed_trees:
+            input_tree = "taxid.nwk"
+
         cmd = [
             sys.executable,
             "prune.py",
 
             "-i",
-            "taxid.nwk",
+            input_tree,
 
             "-o",
             os.path.join(

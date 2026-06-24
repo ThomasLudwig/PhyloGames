@@ -291,6 +291,11 @@ function afficherResultats(tirage) {
     ).style.display =
         "inline-block";
 
+    const btnTestLineaire = document.getElementById("btnTestLineaire");
+    if (btnTestLineaire) {
+        btnTestLineaire.style.display = "none";
+    }
+
     const noms =
         tirage
         .map(e => e.toString())
@@ -547,8 +552,11 @@ function genererQuiz(mapping) {
             const ea = especes[a];
             const eb = especes[b];
 
-            return ea.commonName.localeCompare(
-                eb.commonName
+            const nameA = ea ? ea.commonName : a;
+            const nameB = eb ? eb.commonName : b;
+
+            return nameA.localeCompare(
+                nameB
             );
         });
 
@@ -581,6 +589,10 @@ function genererQuiz(mapping) {
 
         ligne.draggable = true;
 
+        const label = e
+            ? `${e.commonName} (${e.latinName})`
+            : `TaxID ${taxid}`;
+
         ligne.innerHTML =
 
             "<span class='numero'>" +
@@ -588,10 +600,7 @@ function genererQuiz(mapping) {
             " → </span>" +
 
             "<span class='nom'>" +
-            e.commonName +
-            " (" +
-            e.latinName +
-            ")" +
+            label +
             "</span>";
 
         ligne.addEventListener(
@@ -747,6 +756,64 @@ function corrigerQuiz() {
                 "#FFB6B6";
         }
     });
+
+    const positionParTaxid = {};
+
+    for (const numero in reponsesUtilisateur) {
+
+        positionParTaxid[
+            reponsesUtilisateur[numero]
+        ] = parseInt(numero, 10);
+    }
+
+    const toutesLesCladesContigues =
+        clades.every(clade => {
+
+            const positions = clade
+                .map(taxid =>
+                    positionParTaxid[taxid]
+                )
+                .filter(p => p !== undefined)
+                .sort((a, b) => a - b);
+
+            if (positions.length === 0) {
+                return true;
+            }
+
+            return (
+                positions[positions.length - 1] -
+                positions[0] + 1 ===
+                positions.length
+            );
+        });
+
+    if (toutesLesCladesContigues) {
+
+        score = Object.keys(mappingCourant).length;
+
+        lignes.forEach(ligne => {
+
+            ligne.style.backgroundColor =
+                "#90EE90";
+        });
+
+        document.getElementById(
+            "score"
+        ).innerHTML =
+            "<h3>Score : " +
+            score +
+            " / " +
+            score +
+            "</h3>" +
+            "<b>Ordre valide selon la topologie de l'arbre.</b>";
+
+        document.getElementById(
+            "btnNouvellePartie"
+        ).style.display =
+            "inline-block";
+
+        return;
+    }
 
     // =====================
     // Validation clades + équivalences
@@ -934,17 +1001,25 @@ function voirSolution() {
         const e =
             especes[taxid];
 
-        if (!e) continue;
-
-        html +=
-            "<b>" +
-            numero +
-            "</b> → " +
-            e.commonName +
-            " (" +
-            e.latinName +
-            ")" +
-            "<br>";
+        if (e) {
+            html +=
+                "<b>" +
+                numero +
+                "</b> → " +
+                e.commonName +
+                " (" +
+                e.latinName +
+                ")" +
+                "<br>";
+        }
+        else {
+            html +=
+                "<b>" +
+                numero +
+                "</b> → TaxID " +
+                taxid +
+                "<br>";
+        }
     }
 
     html +=
@@ -1021,6 +1096,10 @@ function nouvellePartie() {
     ).style.display =
         "block";
 
+    const btnTestLineaire = document.getElementById("btnTestLineaire");
+    if (btnTestLineaire) {
+        btnTestLineaire.style.display = "inline-block";
+    }
     document.getElementById(
         "btnNouvellePartie"
     ).style.display =
@@ -1255,3 +1334,282 @@ document
     "click",
     nouvellePartie
 );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// =========================
+// Mode test
+// =========================
+
+function lancerTestLineaire() {
+
+    const taxIdsTest = [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8"
+    ];
+
+    const tirage = taxIdsTest.map(id => ({
+        id,
+        commonName: `Feuille ${id}`,
+        latinName: `Leaf ${id}`,
+        toString() {
+            return `${this.commonName} (${this.latinName}) [${this.id}]`;
+        }
+    }));
+
+    console.log(
+        "MODE TEST ARBRE LINEAIRE"
+    );
+
+    document.getElementById(
+        "zoneConfiguration"
+    ).style.display = "none";
+
+    listeTaxIds = taxIdsTest;
+    contenuFichier = listeTaxIds.join(",");
+
+    document.getElementById(
+        "btnDownload"
+    ).style.display = "inline-block";
+
+    document.getElementById(
+        "resultats"
+    ).innerHTML =
+        "<h3>Espèces tirées :</h3>" +
+        tirage.map(e => e.toString()).join("<br>") +
+        "<br><br><h3>Tax IDs :</h3>" +
+        listeTaxIds.join(", ");
+
+    fetch(
+        "http://127.0.0.1:5000/prune",
+        {
+            method: "POST",
+            headers: {
+                "Content-Type":
+                "application/json"
+            },
+            body: JSON.stringify({
+                tax_ids: listeTaxIds,
+                input_tree: "linear_test.nwk"
+            })
+        }
+    )
+
+    .then(response => {
+
+        console.log(
+            "Réponse Flask :",
+            response.status
+        );
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Erreur Flask : " +
+                response.status
+            );
+        }
+
+        return response.json();
+    })
+
+    .then(data => {
+
+        console.log(
+            "Fichiers générés :"
+        );
+
+        console.table(data);
+
+        document.getElementById(
+            "tree-container"
+        ).innerHTML =
+            "<img src='" +
+            data.tree +
+            "?t=" +
+            Date.now() +
+            "' style='max-width:100%;height:auto;'>";
+
+        solutionURL =
+            data.solution;
+
+        mappingFile =
+            data.mapping;
+
+        equivalentsFile =
+            data.equivalents;
+
+        cladesFile =
+            data.clades;
+
+        return fetch(
+            mappingFile +
+            "?t=" +
+            Date.now()
+        );
+    })
+
+    .then(r => {
+
+        console.log(
+            "Chargement mapping.json :",
+            r.status
+        );
+
+        return r.json();
+    })
+
+    .then(mapping => {
+
+        mappingCourant =
+            mapping;
+
+        console.log(
+            "Mapping reçu :"
+        );
+
+        console.table(mapping);
+
+        return fetch(
+            equivalentsFile +
+            "?t=" +
+            Date.now()
+        );
+    })
+
+    .then(r => {
+
+        console.log(
+            "Chargement equivalents.json :",
+            r.status
+        );
+
+        return r.json();
+    })
+
+    .then(eq => {
+
+        equivalences =
+            eq;
+
+        console.log(
+            "Equivalences :"
+        );
+
+        console.log(eq);
+
+        return fetch(
+            cladesFile +
+            "?t=" +
+            Date.now()
+        );
+    })
+
+    .then(r => {
+
+        console.log(
+            "Chargement clades.json :",
+            r.status
+        );
+
+        return r.json();
+    })
+
+    .then(c => {
+
+        clades =
+            c;
+
+        console.log(
+            "Clades :"
+        );
+
+        console.log(c);
+
+        console.log(
+            "================================="
+        );
+
+        console.log(
+            "SOLUTION DU QUIZ"
+        );
+
+        console.log(
+            "================================="
+        );
+
+        Object.keys(mappingCourant)
+            .sort((a, b) => a - b)
+            .forEach(numero => {
+
+                const taxid =
+                    mappingCourant[numero];
+
+                const e =
+                    especes[taxid];
+
+                if (e) {
+
+                    console.log(
+                        numero +
+                        " -> " +
+                        e.commonName +
+                        " (" +
+                        e.latinName +
+                        ") [" +
+                        taxid +
+                        "]"
+                    );
+                }
+                else {
+                    console.log(
+                        numero +
+                        " -> " +
+                        taxid
+                    );
+                }
+            });
+
+        console.log(
+            "================================="
+        );
+
+        genererQuiz(
+            mappingCourant
+        );
+    })
+
+    .catch(error => {
+
+        console.error(
+            "ERREUR :",
+            error
+        );
+
+        document.getElementById(
+            "resultats"
+        ).innerHTML +=
+
+            "<br><br><b>Erreur Flask</b>";
+    });
+}
