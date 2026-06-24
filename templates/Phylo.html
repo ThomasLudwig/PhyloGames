@@ -128,37 +128,35 @@
     </div>
 
     <!-- ========================= -->
-    <!-- Actions -->
-    <!-- ========================= -->
+<!-- Actions -->
+<!-- ========================= -->
 
-    <div class="actions">
+<div class="actions">
+    <button id="btnCorrection">
+        Corriger
+    </button>
 
-        <button id="btnCorrection">
-            Corriger
-        </button>
+    <button id="btnSolution">
+        Voir la solution
+    </button>
 
-        <button id="btnSolution">
-            Voir la solution
-        </button>
+    <button
+        id="btnDownload"
+        style="display:none;">
 
-        <button
-            id="btnDownload"
-            style="display:none;">
+        Télécharger les TaxIDs
 
-            Télécharger les TaxIDs
+    </button>
 
-        </button>
+    <button
+        id="btnNouvellePartie"
+        style="display:none;">
 
-        <button
-            id="btnNouvellePartie"
-            style="display:none;">
+        Nouvelle partie
 
-            Nouvelle partie
+    </button>
 
-        </button>
-
-    </div>
-
+</div>
     <!-- ========================= -->
     <!-- Zone de jeu -->
     <!-- ========================= -->
@@ -184,7 +182,9 @@
         <div id="quiz"></div>
 
     </div>
-
+        <button id="btnTestLineaire" onclick="lancerTestLineaire()">
+            Test arbre linéaire
+        </button>
 </div>
 
     <!-- ========================= -->
