@@ -65,10 +65,24 @@ if len(keep) == 0:
 # Prune
 # =========================
 
-tree.prune(
-    keep,
-    preserve_branch_length=True
-)
+# Instead of using tree.prune() which can have issues with ambiguous node names,
+# we build a new tree keeping only the desired leaves
+keep_set = set(keep)
+
+# Get all leaves to prune
+to_delete = []
+for leaf in tree.iter_leaves():
+    if leaf.name not in keep_set:
+        to_delete.append(leaf)
+
+# Delete leaves not in keep list
+for leaf in to_delete:
+    leaf.delete()
+
+# Clean up: remove nodes with no leaves
+for node in tree.traverse():
+    if not node.is_leaf() and not node.get_leaves():
+        node.delete()
 
 # Copie avant renommage
 

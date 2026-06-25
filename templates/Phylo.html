@@ -51,21 +51,19 @@
 
                 <p>Groupes :</p>
 
-                <select
-                    id="selectGroupes"
-                    multiple
-                    size="8">
+                <div id="groupCheckboxes" class="group-checkboxes">
+                    <label><input type="checkbox" name="groupes" value="Marsupiaux"> Marsupiaux</label>
+                    <label><input type="checkbox" name="groupes" value="Mammifères"> Mammifères</label>
+                    <label><input type="checkbox" name="groupes" value="Oiseaux"> Oiseaux</label>
+                    <label><input type="checkbox" name="groupes" value="Reptiles"> Reptiles</label>
+                    <label><input type="checkbox" name="groupes" value="Poisson"> Poisson</label>
+                    <label><input type="checkbox" name="groupes" value="Invertébrés"> Invertébrés</label>
+                    <label><input type="checkbox" name="groupes" value="Plantes"> Plantes</label>
+                    <label><input type="checkbox" name="groupes" value="Champignons"> Champignons</label>
+                </div>
 
-                    <option value="Marsupiaux">Marsupiaux</option>
-                    <option value="Mammifères">Mammifères</option>
-                    <option value="Oiseaux">Oiseaux</option>
-                    <option value="Reptiles">Reptiles</option>
-                    <option value="Poisson">Poisson</option>
-                    <option value="Invertébrés">Invertébrés</option>
-                    <option value="Plantes">Plantes</option>
-                    <option value="Champignons">Champignons</option>
-
-                </select>
+                <br>
+                <small>Cochez un ou plusieurs groupes puis lancez le tirage.</small>
 
                 <br><br>
 
@@ -179,12 +177,17 @@
 
         <h2>Quiz</h2>
 
+</div>
+
         <div id="quiz"></div>
 
     </div>
-        <button id="btnTestLineaire" onclick="lancerTestLineaire()">
+
+    <div class="actions-bottom">
+        <button id="btnTestLineaire" class="test-mode" onclick="lancerTestLineaire()">
             Test arbre linéaire
         </button>
+    </div>
 </div>
 
     <!-- ========================= -->

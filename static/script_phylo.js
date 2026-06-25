@@ -20,6 +20,26 @@ let mappingFile = "";
 let equivalentsFile = "";
 
 const DEBUG = true;
+
+function handleIconOrderError(img, safe) {
+    const attempt = Number(img.dataset.iconAttempt || 0);
+    if (attempt === 0) {
+        img.dataset.iconAttempt = 1;
+        img.src = '/static/icons/' + safe + '.png';
+    } else if (attempt === 1) {
+        img.dataset.iconAttempt = 2;
+        img.src = '/static/icons/' + safe + '.jpg';
+    } else if (attempt === 2) {
+        img.dataset.iconAttempt = 3;
+        img.src = '/static/icons/' + safe + '.webp';
+    } else if (attempt === 3) {
+        img.dataset.iconAttempt = 4;
+        img.src = '/static/icons/' + safe + '.svg';
+    } else {
+        img.src = '/static/icons/generic.svg';
+    }
+}
+
 // =========================
 // Lecture du fichier csv
 // =========================
@@ -179,6 +199,26 @@ const GROUPES = {
     "Champignons": estChampignon
 };
 
+const GROUP_ICON_SAFE_NAMES = {
+    "Marsupiaux": "marsupiaux",
+    "Mammifères": "mammiferes",
+    "Oiseaux": "oiseaux",
+    "Reptiles": "reptiles",
+    "Poisson": "poisson",
+    "Invertébrés": "invertebres",
+    "Plantes": "plantes",
+    "Champignons": "champignons"
+};
+
+function getGroupNameForEspece(e) {
+    for (const nom in GROUPES) {
+        if (GROUPES[nom](e)) {
+            return nom;
+        }
+    }
+    return null;
+}
+
 function buildGroups() {
 
     const groups = {};
@@ -199,6 +239,17 @@ function buildGroups() {
     }
 
     return groups;
+}
+
+function getSelectedGroupes() {
+    return [...document.querySelectorAll('input[name="groupes"]:checked')]
+        .map(input => input.value);
+}
+
+function getGroupIconHtml(groupName) {
+    const safe = GROUP_ICON_SAFE_NAMES[groupName] || groupName.toLowerCase().replace(/[^a-z0-9]/g, '_');
+    return "<img class='icon-order' src='/static/icons/" + safe + ".svg' " +
+        "onerror=\"handleIconOrderError(this, '" + safe + "')\">";
 }
 
 
@@ -290,11 +341,8 @@ function afficherResultats(tirage) {
         "btnDownload"
     ).style.display =
         "inline-block";
-
-    const btnTestLineaire = document.getElementById("btnTestLineaire");
-    if (btnTestLineaire) {
-        btnTestLineaire.style.display = "none";
-    }
+    // hide any test-mode buttons during a draw
+    document.querySelectorAll('.test-mode').forEach(b => b.style.display = 'none');
 
     const noms =
         tirage
@@ -593,14 +641,29 @@ function genererQuiz(mapping) {
             ? `${e.commonName} (${e.latinName})`
             : `TaxID ${taxid}`;
 
-        ligne.innerHTML =
+        // determine icon based on group (one icon per selected group)
+        let iconHtml = "";
+        let labelText = label;
 
+        if (e) {
+            const groupName = getGroupNameForEspece(e);
+            if (groupName) {
+                iconHtml = getGroupIconHtml(groupName);
+                labelText = `${groupName} — ${label}`;
+            } else {
+                iconHtml = "<img class='icon-order' src='/static/icons/generic.svg'>";
+            }
+        } else {
+            iconHtml = "<img class='icon-order' src='/static/icons/generic.svg'>";
+        }
+
+        ligne.innerHTML =
             "<span class='numero'>" +
             numero +
             " → </span>" +
-
             "<span class='nom'>" +
-            label +
+            iconHtml +
+            labelText +
             "</span>";
 
         ligne.addEventListener(
@@ -1096,10 +1159,8 @@ function nouvellePartie() {
     ).style.display =
         "block";
 
-    const btnTestLineaire = document.getElementById("btnTestLineaire");
-    if (btnTestLineaire) {
-        btnTestLineaire.style.display = "inline-block";
-    }
+    // show any test-mode buttons when starting a new game
+    document.querySelectorAll('.test-mode').forEach(b => b.style.display = 'inline-block');
     document.getElementById(
         "btnNouvellePartie"
     ).style.display =
@@ -1116,15 +1177,8 @@ function lancerTirage() {
 
             buildEspeceTable(rows);
 
-            const select =
-                document.getElementById(
-                    "selectGroupes"
-                );
-
             const choisis =
-                [...select.options]
-                .filter(o => o.selected)
-                .map(o => o.value);
+                getSelectedGroupes();
 
             if (
                 choisis.length === 0
@@ -1140,15 +1194,24 @@ function lancerTirage() {
             const groups =
                 buildGroups();
 
-           const nombre =
-    getNombreTirage();
+            const nombre =
+                getNombreTirage();
 
-const tirage =
-    tirageGroupes(
-        groups,
-        choisis,
-        nombre
-    );
+            const tirage =
+                tirageGroupes(
+                    groups,
+                    choisis,
+                    nombre
+                );
+
+            if (
+                tirage.length === 0
+            ) {
+                alert(
+                    "Aucune espèce trouvée dans les groupes sélectionnés."
+                );
+                return;
+            }
 
             afficherResultats(
                 tirage
@@ -1611,5 +1674,51 @@ function lancerTestLineaire() {
         ).innerHTML +=
 
             "<br><br><b>Erreur Flask</b>";
+    });
+}
+
+function lancerTirageAll() {
+
+    loadCSV(function(rows) {
+
+        buildEspeceTable(rows);
+
+        let choisis = getSelectedGroupes();
+
+        // If no groups selected, use all available groups
+        if (choisis.length === 0) {
+            choisis = Object.keys(GROUPES);
+        }
+
+        const groups =
+            buildGroups();
+
+        // Collect all species from selected groups
+        let toutesEspeces = [];
+        choisis.forEach(groupe => {
+            if (groups[groupe]) {
+                toutesEspeces = toutesEspeces.concat(
+                    groups[groupe]
+                );
+            }
+        });
+
+        // Get the number of species to draw
+        const nombre = getNombreTirage();
+
+        // Draw random species
+        const tirage = tirageAleatoire(
+            toutesEspeces,
+            nombre
+        );
+
+        console.log(
+            "MODE TIRAGE TOUTES ESPECES",
+            tirage.length
+        );
+
+        afficherResultats(
+            tirage
+        );
     });
 }
