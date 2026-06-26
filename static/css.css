@@ -110,8 +110,12 @@ select {
 }
 
 .ligne-quiz img.icon-order {
+    width: 64px !important;
+    height: 64px !important;
     transition: transform 0.2s ease, filter 0.2s ease;
     transform-origin: center center;
+    vertical-align: middle;
+    margin-right: 10px;
 }
 
 .ligne-quiz img.icon-order:hover {
@@ -378,10 +382,4 @@ button:hover {
     font-weight: bold;
 }
 
-/* Icon sizing for species order icons */
-.ligne-quiz img.icon-order {
-    width: 32px !important;
-    height: 32px !important;
-    vertical-align: middle;
-    margin-right: 10px;
 }
