@@ -65,7 +65,13 @@
                 <br>
                 <small>Cochez un ou plusieurs groupes puis lancez le tirage.</small>
 
-                <br><br>
+                <fieldset style="margin-top:16px; text-align:left; width:100%;">
+                    <legend>Niveau de difficulté :</legend>
+                    <label><input type="radio" name="difficulte" value="facile" checked> Facile (affiche Règne / Classe / Ordre)</label><br>
+                    <label><input type="radio" name="difficulte" value="difficile"> Difficile (masque les détails)</label>
+                </fieldset>
+
+                <br>
 
                 <button onclick="lancerTirage()">
                     Tirage simple
@@ -83,11 +89,11 @@
 <!-- ========================= -->
 
 <div class="actions">
-    <button id="btnCorrection">
+    <button id="btnCorrection" style="display:none;">
         Corriger
     </button>
 
-    <button id="btnSolution">
+    <button id="btnSolution" style="display:none;">
         Voir la solution
     </button>
 
