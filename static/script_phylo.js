@@ -246,6 +246,19 @@ function getSelectedGroupes() {
         .map(input => input.value);
 }
 
+function getModeDifficulte() {
+    const radio = document.querySelector('input[name="difficulte"]:checked');
+    return radio ? radio.value : "facile";
+}
+
+function formatEspeceLabel(e, mode) {
+    const label = `${e.commonName} (${e.latinName})`;
+    if (mode === "facile") {
+        return `${label}<span class="espece-details">${e.reign} / ${e.clas} / ${e.order}</span>`;
+    }
+    return label;
+}
+
 function getGroupIconHtml(groupName) {
     const safe = GROUP_ICON_SAFE_NAMES[groupName] || groupName.toLowerCase().replace(/[^a-z0-9]/g, '_');
     return "<img class='icon-order' src='/static/icons/" + safe + ".svg' " +
@@ -339,6 +352,14 @@ function afficherResultats(tirage) {
 
     document.getElementById(
         "btnDownload"
+    ).style.display =
+        "inline-block";
+    document.getElementById(
+        "btnCorrection"
+    ).style.display =
+        "inline-block";
+    document.getElementById(
+        "btnSolution"
     ).style.display =
         "inline-block";
     // hide any test-mode buttons during a draw
@@ -593,6 +614,8 @@ function genererQuiz(mapping) {
     const listeEspeces =
         Object.values(mapping);
 
+    const modeDifficulte = getModeDifficulte();
+
     const especesTriees =
         [...listeEspeces]
         .sort((a, b) => {
@@ -649,9 +672,12 @@ function genererQuiz(mapping) {
             const groupName = getGroupNameForEspece(e);
             if (groupName) {
                 iconHtml = getGroupIconHtml(groupName);
-                labelText = `${groupName} — ${label}`;
             } else {
                 iconHtml = "<img class='icon-order' src='/static/icons/generic.svg'>";
+            }
+            labelText = formatEspeceLabel(e, modeDifficulte);
+            if (groupName) {
+                labelText = `${groupName} — ${labelText}`;
             }
         } else {
             iconHtml = "<img class='icon-order' src='/static/icons/generic.svg'>";
@@ -1073,7 +1099,13 @@ function voirSolution() {
                 " (" +
                 e.latinName +
                 ")" +
-                "<br>";
+                "<span class='espece-details'>" +
+                e.reign +
+                " / " +
+                e.clas +
+                " / " +
+                e.order +
+                "</span><br>";
         }
         else {
             html +=
@@ -1137,6 +1169,12 @@ function nettoyerInterface() {
     document.getElementById(
         "btnDownload"
     ).style.display = "none";
+    document.getElementById(
+        "btnCorrection"
+    ).style.display = "none";
+    document.getElementById(
+        "btnSolution"
+    ).style.display = "none";
 
     mappingCourant = {};
 
@@ -1161,6 +1199,12 @@ function nouvellePartie() {
 
     // show any test-mode buttons when starting a new game
     document.querySelectorAll('.test-mode').forEach(b => b.style.display = 'inline-block');
+    document.getElementById(
+        "btnCorrection"
+    ).style.display = "none";
+    document.getElementById(
+        "btnSolution"
+    ).style.display = "none";
     document.getElementById(
         "btnNouvellePartie"
     ).style.display =
@@ -1301,22 +1345,6 @@ document
     "click",
     nouvellePartie
 );
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // =========================
 // Mode test
