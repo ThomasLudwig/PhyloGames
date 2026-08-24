@@ -2,21 +2,17 @@
 
 Vulgarisation Scientifique : Arbres Phylogénétiques
 
-# PhyloGames
-
 ## Prérequis
 
 * Python 3.11
-* Flask
 * ETE3
-* PyQt5
 
 ## Installation
 
 Installer les dépendances :
 
 ```bash
-pip install flask ete3 pyqt5
+pip install ete3
 ```
 
 ## Lancement
@@ -24,13 +20,13 @@ pip install flask ete3 pyqt5
 Depuis le dossier du projet :
 
 ```bash
-python server.py
+python phylogame.py
 ```
 
 Le serveur démarre sur :
 
 ```text
-http://127.0.0.1:5000
+http://127.0.0.1:8000
 ```
 
 Ouvrir cette adresse dans un navigateur.
@@ -38,9 +34,9 @@ Ouvrir cette adresse dans un navigateur.
 ## Structure principale
 
 ```text
-server.py      # serveur Flask
-prune.py       # génération de l'arbre phylogénétique
-taxid.nwk      # arbre de référence
-templates/     # pages HTML
-static/        # JavaScript, images et fichiers générés
+phylogame.py   # serveur python
+index.html     # page principale (vide)
+data/          # données phylogénétique
+html/          # pages HTML, CSS, JavaScript
+python/        # Scripts Python
 ```
