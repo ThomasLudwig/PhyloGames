@@ -1,3 +1,4 @@
 six
 ete3
 scipy
+legacy-cgi; python_version >= "3.13"
