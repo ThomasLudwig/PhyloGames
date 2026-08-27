@@ -1,5 +1,6 @@
 import { postJSON } from "./main.js";
 
+// Request a new Session
 export async function createSession() {
   const parameters = {
     speciesset: document.querySelector('input[name="speciesset"]:checked').value,
@@ -17,20 +18,6 @@ export async function createSession() {
     gamemode: document.querySelector('input[name="gamemode"]:checked').value
   };
 
-  /*
-  const response = await fetch("/api/session", {
-    method: "POST",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify(parameters)
-  });
-
-  const data = await response.json();
-  console.log("Session ID:", data.sessionId);
-  return data.sessionId;*/
   const data = await postJSON("/api/session", parameters);
   return data.sessionId;
-}
-
-export async function deleteSession(sessionId) {
-  await fetch(`/api/session/${sessionId}`, {method: "DELETE"});
 }

@@ -1,0 +1,115 @@
+:root{
+  --pad-select : 5px;
+  --img-dim : 128px;
+  --tile-width : 600px;
+  --game-width : 840px;
+  --right-width : 712px;
+  --neutral-color : #e0e0f5;
+  --correct-color: #e0f5e0;
+  --incorrect-color: #f5e0e0;
+  --move-color : #4285f4;
+}
+
+.swap {
+  width: var(--game-width);
+}
+
+.sortable-list {
+  list-style: none;
+  padding: 0; /* remove default padding from list */
+  margin: 0; /* remove default margin from list*/
+}
+
+.sortable-item {
+  padding : var(--pad-select);
+  border-radius: var(--radius);
+  border-left: 2px solid black;
+  position:relative;
+}
+
+.sortable-item:hover {
+  border-left: 4px solid var(--move-color);
+  cursor: pointer;
+}
+
+.dragging {
+  opacity: 0.85;
+  box-shadow: 0 0 0 var(--pad-select) var(--move-color);
+}
+
+.sortable-item.dragging::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: var(--move-color);
+  opacity: 0.4;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.select{
+  border-radius: var(--radius);
+  display: flex; /* image and .right sit side by side */  
+}
+
+.neutral {
+  background-color: var(--neutral-color);
+}
+
+.correct {
+  background-color: var(--correct-color);
+}
+
+.incorrect {
+  background-color: var(--incorrect-color);
+}
+
+.avatar{
+  width: var(--img-dim);
+  height: var(--img-dim);
+  border-radius: var(--radius);
+}
+
+.right{
+  display: flex;
+  flex-direction: column; /* stack locale/latin/details vertically */
+  padding-left: 5px;
+  padding-right: 5px;  
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.locale, .latin, .details{
+  width:var(--right-width);
+  display: flex;
+  justify-content: center; /* horizontal */
+  align-items: center; /* vertical */
+}
+
+.locale{
+  height: 40px;
+  font-size: 25px;
+  font-weight: bold;
+  white-space: nowrap;
+  font-family: Arial, sans-serif;
+  text-transform: capitalize;
+}
+
+.latin {
+  height: 26px;
+  font-size: 22px;
+  font-style: italic;
+  white-space: nowrap;
+  font-family: Verdana, sans-serif;
+  text-transform: lowercase;
+}
+
+.details{
+  height: 50px;
+  font-style: italic;
+  word-break: break-word;
+  font-size: 21px;
+  font-family: garamond, serif;
+  text-transform: capitalize;
+}

@@ -1,0 +1,28 @@
+#score {
+  display: flex;
+  flex-direction: column;
+} 
+
+#score-metrics {
+  display: flex;
+  flex-direction: row;
+}
+
+.metrics {
+  padding-left: 20px;
+  font-size: 20px;
+  margin: 5px;
+}
+
+.metric-value {
+  font-weight: bold;
+  font-size: 25px;
+  color: navy;
+}
+
+#timer {
+  font-weight: bold;
+  font-size: 25px;
+  color: darkred;
+  font-family: 'Courier New', Courier, monospace;
+}

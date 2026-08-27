@@ -11,8 +11,10 @@ Built entirely on ete3's own Tree API:
 """
 
 import os
+
 from ete3 import Tree
 from scipy.optimize import linear_sum_assignment
+
 
 def solve(session):
   """
@@ -44,10 +46,6 @@ def doEvaluate(tree, guess):
   maximize the total number of True's.
   """
 
-  print("Guess")
-  for sp in guess:
-    print(f"- [{sp}]")
-
   truth = prepare(tree)
   assert sorted(guess) == sorted(truth), "guess must be a permutation of the true species set"
   memo = {}
@@ -68,10 +66,6 @@ def prepare(tree):
   for i, leaf in enumerate(tree.iter_leaves()):
     leaf.add_feature("slot", i)
 
-  print("Tree")
-  for sp in tree.iter_leaves():
-    print(f"- [{sp}]")
-
   compute_shape(tree)
 
   truth = [None] * sum(1 for _ in tree.iter_leaves())
@@ -80,6 +74,9 @@ def prepare(tree):
   return truth
 
 def compute_shape(node):
+  """
+  Computes the shape of the node
+  """  
   if node.is_leaf():
     node.add_feature("shape", "L")
   else:
@@ -127,4 +124,3 @@ def g(u, v, guess, truth, memo):
 
   memo[key] = (total, mapping)
   return total, mapping
-

@@ -1,6 +1,5 @@
-
+// Element Dragging
 export function drag() {
-  console.log("Init dragging");
   const list = document.querySelector('.sortable-list');
   let draggingItem = null;
   
@@ -22,12 +21,12 @@ export function drag() {
     if (draggingOverItem) {
       draggingOverItem.classList.add('over');
       list.insertBefore(draggingItem, draggingOverItem);
-    } else {
+    } else
       list.appendChild(draggingItem); 
-    }
   });
 }
 
+//After dragging
 function getDragAfterElement(container, y) {
   const draggableElements = [...container.querySelectorAll('.sortable-item:not(.dragging)')];
   return draggableElements.reduce((closest, child) => {

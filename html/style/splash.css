@@ -1,0 +1,11 @@
+#splash {  
+  display: block;
+  padding-left: 80px;
+  padding-right: 40px;
+  text-align: left;
+}
+
+.emph {
+  font-weight: bold;
+  color: navy;
+}

@@ -1,0 +1,55 @@
+@import "headerfooter.css";
+@import "button.css";
+@import "splash.css";
+@import "settings.css";
+@import "score.css";
+@import "game.css";
+
+:root{  
+  --page-width : 1450px;
+  --radius : 10px;  
+  --body-color: white;
+}
+
+h2, h3 {
+  text-align: center;
+  margin-top: 0;  /* cancel default h2h3 */
+  padding-top: 0; /* cancel default h2h3 */
+  font-weight: bolder;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: Arial, sans-serif;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  width: var(--page-width);  
+  padding-bottom: 70px;
+  background-color: var(--body-color);
+}
+
+.mainbig {
+  padding-top: var(--banner-height);
+}
+
+.mainsmall {
+  padding-top: 110px;
+}
+
+section {
+  display: flex;
+  flex-direction: row;
+  padding: 10px;
+  border-radius: calc(2 * var(--radius));
+}
+
+img {
+  -webkit-user-drag: none;
+  user-select: none;
+  pointer-events: none;
+}

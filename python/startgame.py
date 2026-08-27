@@ -1,55 +1,70 @@
-import os
 import csv
+import os
 import random
+
 from python import treehandler
 
-##Entry point to prepare a session
+
 def prepare(sessionID, wd, parameters):
-  print(f"SessionID: {sessionID}")
-  print(f"Working Dir: {wd}")
-  for key, value in parameters.items():
-    print(f"Param {key} ==> {value}")
+  """
+  Entry point to prepare a session
+  """
+  output = os.path.join(wd, "game.html")
+  mode = parameters.get("gamemode")
+  nbspecies = int(parameters.get("nbspecies"))
+
+  workSpecies = None
 
   allspecies = load_species("data/species.tsv")  
-  print(f"Loaded {len(allspecies)} species")
 
-  output = os.path.join(wd, "game.html")
-
-  filteredspecies = filter_rows(allspecies, getColumnNames(parameters))
-  print(f"Filtered {len(filteredspecies)} species")
-
-  #getnbspecies
-  mode = parameters.get("gamemode")
-  nbspecies = parameters.get("nbspecies")
-  nbspecies = min(nbspecies, len(filteredspecies))
-
-  workSpecies = select_rows(filteredspecies, random_integers(nbspecies, len(filteredspecies)))
-  print(f"working {len(workSpecies)} species")
+  if parameters.get("speciesset") == "australie":
+    workSpecies = createAustralia(allspecies, nbspecies)
+  else :      
+    filteredspecies = filter_rows(allspecies, getColumnNames(parameters))
+    #getnbspecies
+    nbspecies = min(nbspecies, len(filteredspecies))
+    workSpecies = select_rows(filteredspecies, random_integers(nbspecies, len(filteredspecies)))
 
   treehandler.generate(wd, workSpecies)
-  
   with open(output, "w", encoding="utf-8") as f:
     createGameHTML(f, sessionID, workSpecies, mode)
 
-def listAllSpecies():
-  allspecies = load_species("data/species.tsv")
-  output = "data/allSpecies.html"
-  with open(output, "w", encoding="utf-8") as f:
-    f.write("<div class=\tree\">Nothing</div>")
-    printList(f, allspecies, "1")
-  return "ok"
+def createAustralia(all, nb):
+  """
+  Creates a subtree for australia game
+  """
+  australia = []
+  with open("data/austral.tsv", newline="", encoding="utf-8") as f:
+    reader = csv.DictReader(f, delimiter="\t")  # uses header row as keys
+    for row in reader:
+      australia.append(row)
+
+  pool = select_rows(australia, random_integers(nb/2, len(australia)))
+  valid_ids = {row["sp1"] for row in pool} | {row["sp2"] for row in pool}
+
+  # Filter source
+  extract = [row for row in all if row["latin"] in valid_ids]
+  return extract
   
-##Writes the HTML code the session/game.html
 def createGameHTML(f, sessionID, table, mode):
+  """
+  Writes the HTML code the session/game.html
+  """
   printTree(f, sessionID)
   printList(f, table, mode)
 
 def printTree(f, sessionID):
+  """
+  Writes the HTML for the tree div
+  """
   f.write(f"<div id=\"{sessionID}\" class=\"tree\">")
   f.write(f" <img src=\"sessions/{sessionID}/tree.svg\" alt=\"thetree\" class=\"tile\"/>")
   f.write("</div>")
 
 def printList(f, table, mode):
+  """
+  Writes the HTML for the swap div
+  """
   f.write("<div class=\"swap\">")
   f.write(" <ul class=\"sortable-list\">")
   for row in table:
@@ -69,8 +84,10 @@ def printList(f, table, mode):
   f.write(" </ul>\n")
   f.write("</div>\n")
 
-## Gets the image path for a species
 def getImage(latin):
+  """
+  Gets the image path for a species
+  """
   jpg = getImagePath(latin, "jpg")
   if os.path.exists(jpg):
     return jpg
@@ -82,12 +99,16 @@ def getImage(latin):
     return svg
   return "html/images/missing.svg"
 
-## Gets a plausible image path for a species and an extension
 def getImagePath(latin, ext):
+  """
+  Gets a plausible image path for a species and an extension
+  """
   return f"html/images/{'_'.join(latin.split())}.{ext}"
 
-## Loads the original species.tsv files
 def load_species(path):
+  """
+  Loads the original species.tsv files
+  """
   species = []
   with open(path, newline="", encoding="utf-8") as f:
     reader = csv.DictReader(f, delimiter="\t")  # uses header row as keys
@@ -95,8 +116,21 @@ def load_species(path):
       species.append(row)
   return species
 
-## List columns to consider depending on selected parameters
+def listAllSpecies():
+  """
+  Loads all the species, to display them
+  """
+  allspecies = load_species("data/species.tsv")
+  output = "data/allSpecies.html"
+  with open(output, "w", encoding="utf-8") as f:
+    f.write("<div class=\tree\">Nothing</div>")
+    printList(f, allspecies, "1")
+  return "ok"
+
 def getColumnNames(parameters):
+  """
+  List columns to consider depending on selected parameters
+  """
   if parameters.get("speciesset") == "fruits":
       return ["Fruits"] 
   if parameters.get("speciesset") == "australie":
@@ -105,6 +139,14 @@ def getColumnNames(parameters):
       return ["Ferme"] 
   if parameters.get("speciesset") == "foret":
       return ["Foret"] 
+  if parameters.get("speciesset") == "beach":
+      return ["mer"] 
+  if parameters.get("speciesset") == "primate":
+      return ["primate"] 
+  if parameters.get("speciesset") == "cute":
+      return ["cute"] 
+  if parameters.get("speciesset") == "ugly":
+      return ["ugly"] 
   if parameters.get("speciesset") == "dino":
       return ["Dino"] 
   if parameters.get("speciesset") == "maladie":
@@ -132,17 +174,24 @@ def getColumnNames(parameters):
     ret.append("Bact")    
   return ret
 
-# Applies a filter on the original table, from a list of columns
 def filter_rows(table, columns):
+  """
+  Applies a filter on the original table, from a list of columns
+  """
   return [
     row for row in table
     if any(row.get(col) == "1" for col in columns)
   ]
 
-# Generates n distinct integer in [1;x]
 def random_integers(n, x):
-  return random.sample(range(1, x + 1), n)
+  """
+  Generates n distinct integer in [1;x]
+  """
+  #print(f"range nb:{n} from size:{x}")
+  return random.sample(range(1, x + 1), int(n))
 
-# Keep only the selected rows from a table
 def select_rows(table, indices):
+  """
+  Keeps only the selected rows from a table
+  """
   return [table[i - 1] for i in indices]

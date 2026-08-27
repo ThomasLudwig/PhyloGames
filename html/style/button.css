@@ -1,0 +1,36 @@
+:root{
+  --go-color : dodgerblue;
+  --val-color : limegreen;
+  --solve-color : darkorange;
+  --restart-color : dodgerblue;
+}
+
+button {
+  margin-left: 5px;
+  margin-right: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: 1px solid white;
+  box-shadow: 2px 2px 2px 1px gray;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-weight: bold;
+  color: white;
+}
+
+#go {
+  background-color: var(--go-color);
+}
+
+#val {
+  background-color: var(--val-color);
+}
+
+#solve {
+  background-color: var(--solve-color);
+}
+
+#restart {
+  background-color: var(--restart-color);
+}

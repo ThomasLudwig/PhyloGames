@@ -2,24 +2,19 @@ import json
 import os
 
 from ete3 import Tree
+
 from python import nwk2svg
 
 
-## Creates a subtree for the selected species
 def generate(wd, table):
+  """
+  Creates a subtree for the selected species
+  """
   taxa = [row["latin"] for row in table]
-  input = "data/phyliptree.phy"
+  input = "data/phyliptree.nwk"
   output = os.path.join(wd, "tree.nwk")
   map = os.path.join(wd, "order.json")
-  clades = os.path.join(wd, "clades.json")
-  equivs = os.path.join(wd, "equivs.json")
   svg = os.path.join(wd, "tree.svg")
-  print(f"Input: {input}")
-  print(f"WD: {wd}")
-  print(f"Output: {output}")
-  print(f"taxa: {len(taxa)}")
-  for tax in taxa:
-    print(f" -{tax}")
 
   #Load ete Tree
   tree = Tree(input, format=1)
@@ -29,18 +24,17 @@ def generate(wd, table):
   save(tree, output)
   #Save species order
   mapping(tree, map)
-  #Save clades and equivs
-  cladesAndEquiv(tree, clades, equivs)
   #Draw SVG
-  #draw(tree, svg)
   draw(output, svg)
 
 def prune(tree, taxa)  :
+  """
+  Kee only the listed taxa in the tree
+  """
   #existing leaves
   existing = set(tree.get_leaf_names())
   i = 0
   for ex in existing:
-    print(f"* {ex}")
     if i > 9:
       break
     i = i+1
@@ -68,12 +62,16 @@ def prune(tree, taxa)  :
     if not node.is_leaf() and not node.get_leaves():
       node.delete()
 
-# Writes Tree to nwk file
 def save(tree, output):
+  """
+  Writes Tree to nwk file
+  """
   tree.write(outfile=output,format=1)
 
-# Save Species order
 def mapping(tree, map):
+  """
+  Saves the Species order
+  """
   mapping = {}
   for i, leaf in enumerate(tree.iter_leaves(), start=1):
     mapping[str(i)] = leaf.name
@@ -81,42 +79,9 @@ def mapping(tree, map):
   with open(map, "w", encoding="utf-8") as f:
     json.dump( mapping, f, ensure_ascii=False, indent=4)
 
-def cladesAndEquiv(tree, cladesFile, equivsFile):
-  equivs = {}
-  clades = []
-
-  for node in tree.traverse():
-
-    #Not processing leaves
-    if node.is_leaf():
-      continue
-
-    #Not processing node that are not bi-branch (ie exclude singles)
-    children = node.get_children()
-    if len(children) != 2:
-      continue
-
-    # sister leaves
-    if (children[0].is_leaf() and children[1].is_leaf()):
-      a = children[0].name
-      b = children[1].name
-      equivs.setdefault(a, []).append(b)
-      equivs.setdefault(b, []).append(a)
-
-    # complet clade
-    feuilles = sorted(node.get_leaf_names())
-    if len(feuilles) > 1:
-      clades.append(feuilles)
-
-  # Save equivs
-  with open(equivsFile,"w",encoding="utf-8") as f:
-    json.dump(equivs, f, ensure_ascii=False, indent=4)
-
-  # Saves clades
-  with open(cladesFile,"w",encoding="utf-8") as f:
-    json.dump(clades,f,ensure_ascii=False,indent=4)
-
-# Draws the subtree
 def draw(nck, svg):
+  """
+  Draws the pruned tree
+  """  
   nwk2svg.NWK2SVG.run(nck, svg, 600, 138)
 

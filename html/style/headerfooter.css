@@ -1,0 +1,93 @@
+:root{
+  --banner-height : 265px;
+  --small-banner-height : 100px;
+}
+
+/* Both */
+
+header, footer {
+  display: flex;
+  flex-direction: row;
+  width: var(--page-width);
+  justify-content: center;
+  padding: 0;
+  position: fixed;
+  background-color: var(--body-color);
+  z-index: 1;
+ /* box-shadow: 5px 5px 5px 5px #4285f4;*/
+}
+
+/* Header */
+
+header {
+  top: 0;
+}
+
+#bighead {
+  background-image: url('/html/images/logo/banner.png');
+  height: var(--banner-height);
+  border-radius: var(--radius);
+}
+
+#smallhead {
+  background-image: url('/html/images/logo/banner2.png');
+  height: var(--small-banner-height);
+  border-radius: var(--radius);
+}
+
+.myheader{
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  color: white;
+  text-shadow:
+  -2px -2px 0 black,
+   2px -2px 0 black,
+  -2px  2px 0 black,
+   2px  2px 0 black,
+   0   -2px 0 black,
+   0    2px 0 black,
+  -2px  0   0 black,
+   2px  0   0 black;
+  width: var(--page-width);
+}
+
+.innerheader{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.maintitle {
+  font-size: 96px;
+  font-weight: bolder;
+}
+
+.maintitlesmaller {
+  font-size: 72px;
+  font-weight: bolder;
+}
+
+.subtitle {
+  font-size: 32px;
+  font-style: italic;    
+}
+
+/* Footer */
+
+footer {
+  bottom: 0;
+  color: navy;
+  background-color: white;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo {
+  margin-left: 5px;
+  margin-right: 5px;
+  height: 50px;
+}
