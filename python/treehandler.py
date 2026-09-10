@@ -12,6 +12,7 @@ def generate(wd, table):
   """
   taxa = [row["latin"] for row in table]
   input = "data/phyliptree.nwk"
+  unclean = os.path.join(wd, "unclean.nwk")
   output = os.path.join(wd, "tree.nwk")
   map = os.path.join(wd, "order.json")
   svg = os.path.join(wd, "tree.svg")
@@ -20,6 +21,10 @@ def generate(wd, table):
   tree = Tree(input, format=1)
   #Prune to selected species
   prune(tree, taxa)
+  #Remove unary nodes
+  save(tree, unclean)
+  remove_unary_nodes(tree, False)
+
   #Save pruned tree
   save(tree, output)
   #Save species order
@@ -61,6 +66,51 @@ def prune(tree, taxa)  :
   for node in tree.traverse():
     if not node.is_leaf() and not node.get_leaves():
       node.delete()
+
+def remove_unary_nodes(tree, preserve_distances=False):
+  """
+  Remove unary nodes while preserving the Tree root object.
+
+  Unary internal nodes are collapsed.
+  A unary root is replaced by its only child in place.
+  """
+
+  # Collapse unary non-root nodes
+  changed = True
+
+  while changed:
+    changed = False
+    for node in list(tree.traverse("postorder")):
+      if node.is_root() or len(node.children) != 1:
+        continue
+      child = node.children[0]
+      if preserve_distances:
+        child.dist += node.dist
+      node.delete(prevent_nondicotomic=False)
+      changed = True
+      break
+
+  # Collapse unary root nodes without replacing the Tree object
+  while len(tree.children) == 1:
+    child = tree.children[0]
+
+    if preserve_distances:
+      tree.dist += child.dist
+
+    # Copy the child's properties into the existing root
+    tree.name = child.name
+    tree.dist = child.dist
+    tree.support = child.support
+
+    # Detach the child's children
+    grandchildren = child.children[:]
+    child.detach()
+
+    # Attach grandchildren directly to the existing root
+    for grandchild in grandchildren:
+      tree.add_child(grandchild)
+
+  return tree
 
 def save(tree, output):
   """
